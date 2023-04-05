@@ -1,4 +1,4 @@
-const Room = require('../schemas/room');
+const Room = require('../models/roomModel');
 const catchAsync = require('../utils/catchAsync');
 
 exports.createRoom = catchAsync(async (req, res, next) => {
@@ -12,6 +12,18 @@ exports.createRoom = catchAsync(async (req, res, next) => {
     status: 'success',
     data: {
       data: newRoom,
+    },
+  });
+});
+
+exports.getAllRoom = catchAsync(async (req, res, next) => {
+  const Rooms = await Room.find();
+
+  res.status(200).json({
+    status: 'sucees',
+    length: Rooms.length,
+    data: {
+      data: Rooms,
     },
   });
 });
