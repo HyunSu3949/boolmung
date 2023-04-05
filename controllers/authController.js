@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const { promisify } = require('util');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -61,3 +62,46 @@ exports.login = catchAsync(async (req, res, next) => {
 
   createSendToken(user, 200, res);
 });
+
+exports.protect = catchAsync(async (req, res, next) => {
+  // 토큰 확인
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token) {
+    return next(new AppError('토큰이 없습니다. 로그인이 필요합니다.', 401));
+  }
+
+  // 토큰 검증
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+  // 유저 확인
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser) {
+    return next(
+      new AppError('토큰을 소유하고 있는 유저가 존재하지 않습니다.', 401)
+    );
+  }
+
+  // req에 유저 정보 추가
+  req.user = currentUser;
+  next();
+});
+
+exports.restrictTo = (role) => {
+  return (req, res, next) => {
+    // roles ['admin', 'user']
+    if (role !== req.user.role) {
+      return next(
+        new AppError('권한이 없습니다. 관리자 계정으로 로그인 하세요', 403)
+      );
+    }
+
+    next();
+  };
+};
