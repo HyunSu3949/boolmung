@@ -8,6 +8,9 @@ exports.createRoom = catchAsync(async (req, res, next) => {
     owner: req.user.id,
   });
 
+  const io = req.app.get('io');
+  io.of('/room').emit('newRoom', newRoom);
+
   res.status(201).json({
     status: 'success',
     data: {
