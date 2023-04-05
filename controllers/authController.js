@@ -1,8 +1,8 @@
-const crypto = require("crypto");
-const jwt = require("jsonwebtoken");
-const User = require("./../models/userModel");
-const catchAsync = require("./../utils/catchAsync");
-const AppError = require("./../utils/appError");
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+const User = require('./../models/userModel');
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -18,15 +18,15 @@ const createSendToken = (user, statusCode, res) => {
     ),
     httpOnly: true,
   };
-  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
-  res.cookie("jwt", token, cookieOptions);
+  res.cookie('jwt', token, cookieOptions);
 
   // res에 password 제거
   user.password = undefined;
 
   res.status(statusCode).json({
-    status: "success",
+    status: 'success',
     token,
     data: {
       user,
@@ -50,13 +50,13 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // email, password 있는지 확인
   if (!email || !password) {
-    return next(new AppError("이메일과 비밀번호를 입력하세요", 400));
+    return next(new AppError('이메일과 비밀번호를 입력하세요', 400));
   }
   // 이메일, 비밀번호 맞는지 확인
-  const user = await User.findOne({ email }).select("+password");
+  const user = await User.findOne({ email }).select('+password');
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError("이메일 또는 비밀번호가 일치하지 않습니다", 401));
+    return next(new AppError('이메일 또는 비밀번호가 일치하지 않습니다', 401));
   }
 
   createSendToken(user, 200, res);
