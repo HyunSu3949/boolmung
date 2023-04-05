@@ -23,4 +23,7 @@ const roomSchema = new mongoose.Schema({
   },
 });
 
+// user는 room 한개만 개설 가능
+roomSchema.index({ owner: 1 }, { unique: true });
+
 module.exports = mongoose.model('Room', roomSchema);
