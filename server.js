@@ -24,7 +24,7 @@ const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
 
-webSocket(server);
+webSocket(server, app);
 
 process.on('unhandledRejection', (err) => {
   console.log('UNHANDLED REJECTION!!!! Shutting down...');
