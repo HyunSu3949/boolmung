@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -25,6 +26,7 @@ app.options('*', cors());
 app.use(express.json({ limit: '10kb' }));
 
 app.use(express.static(`${__dirname}/public`));
+app.use(cookieParser());
 
 // Routes
 app.use('/api/v1/users', userRouter);

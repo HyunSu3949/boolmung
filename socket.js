@@ -26,11 +26,6 @@ module.exports = (server, app) => {
     socket.on('join', (data) => {
       console.log('join 이벤트 발생');
       socket.join(data);
-
-      socket.to(data).emit('join', {
-        user: 'system',
-        chat: `${socket.handshake.query.username}님이 입장하셨습니다.`,
-      });
     });
 
     socket.on('disconnect', () => {

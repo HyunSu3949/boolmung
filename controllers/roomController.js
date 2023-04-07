@@ -2,6 +2,7 @@ const Room = require('../models/roomModel');
 const Chat = require('../models/chatModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const User = require('../models/userModel');
 
 exports.createRoom = catchAsync(async (req, res, next) => {
   const newRoom = await Room.create({
@@ -35,6 +36,7 @@ exports.getAllRoom = catchAsync(async (req, res, next) => {
 
 exports.enterRoom = catchAsync(async (req, res, next) => {
   const room = await Room.findById(req.params.id);
+  const user = await User.findById('642cd7e483adb56ba6feb015'); // 임시로 아이디 하드코딩
 
   if (!room) {
     return next(new AppError('채팅방이 존재하지 않습니다.', 404));
@@ -50,6 +52,13 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
   if (room.max <= rooms.get(req.params.id)?.size) {
     return next(new AppError('허용 인원을 초과하였습니다.', 404));
   }
+
+  io.of('/chat')
+    .to(req.params.id)
+    .emit('join', {
+      user: 'system',
+      chat: `${user.name}님이 입장하셨습니다.`,
+    });
 
   res.status(200).json({
     status: 'success',
@@ -71,4 +80,14 @@ exports.removeRoom = catchAsync(async (req, res, next) => {
     status: 'success',
     data: '채팅방이 삭제되었습니다.',
   });
+});
+
+exports.sendChat = catchAsync(async (req, res, next) => {
+  const chat = await Chat.create({
+    room: req.params.id,
+    user: req.session.color,
+    chat: req.body.chat,
+  });
+  req.app.get('io').of('/chat').to(req.params.id).emit('chat', chat);
+  res.send('ok');
 });
