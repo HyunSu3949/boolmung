@@ -1,8 +1,9 @@
 const Room = require('../models/roomModel');
 const Chat = require('../models/chatModel');
+const User = require('../models/userModel');
+
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('./../utils/appError');
-const User = require('../models/userModel');
 
 exports.createRoom = catchAsync(async (req, res, next) => {
   const newRoom = await Room.create({
@@ -82,9 +83,11 @@ exports.removeRoom = catchAsync(async (req, res, next) => {
 });
 
 exports.sendChat = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
   const chat = await Chat.create({
     room: req.params.id,
-    user: req.session.color,
+    user: req.user.id,
     chat: req.body.chat,
   });
   req.app.get('io').of('/chat').to(req.params.id).emit('chat', chat);
