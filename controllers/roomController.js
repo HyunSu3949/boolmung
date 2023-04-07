@@ -1,5 +1,5 @@
-const Room = require('../schemas/room');
-const Chat = require('../schemas/chat');
+const Room = require('../models/roomModel');
+const Chat = require('../models/chatModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('./../utils/appError');
 
@@ -51,15 +51,21 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
     return next(new AppError('허용 인원을 초과하였습니다.', 404));
   }
 
-  res.status(200).json({
-    status: 'success',
-    data: {
-      room,
-    },
+  // res.status(200).json({
+  //   status: 'success',
+  //   data: {
+  //     room,
+  //   },
+  // });
+
+  return res.render('chat', {
+    room,
+    title: room.title,
+    chats: [],
   });
 });
 
-exports.removeRoom = catchAsync(async (req, req, next) => {
+exports.removeRoom = catchAsync(async (req, res, next) => {
   const room = await Room.findByIdAndDelete(req.params.id);
   const chat = await Chat.deleteMany({ room: req.params.id });
 
@@ -69,6 +75,6 @@ exports.removeRoom = catchAsync(async (req, req, next) => {
 
   res.status(204).json({
     status: 'success',
-    data: null,
+    data: '채팅방이 삭제되었습니다.',
   });
 });

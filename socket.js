@@ -1,7 +1,10 @@
 const SocketIO = require('socket.io');
 
 module.exports = (server, app) => {
-  const io = SocketIO(server, { path: '/socket.io' });
+  const io = SocketIO(server, {
+    path: '/socket.io',
+    cors: { origin: '*', methods: ['GET', 'POST'] },
+  });
 
   app.set('io', io);
   const room = io.of('/room');
@@ -18,7 +21,13 @@ module.exports = (server, app) => {
     console.log('chat 네임스페이스에 접속');
 
     socket.on('join', (data) => {
+      console.log('join 이벤트 발생');
       socket.join(data);
+
+      socket.to(data).emit('join', {
+        user: 'system',
+        chat: '입장하셨습니다.',
+      });
     });
 
     socket.on('disconnect', () => {

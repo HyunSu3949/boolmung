@@ -4,8 +4,15 @@ const authController = require('../controllers/authController');
 
 const router = express.Router();
 
-router.use(authController.protect);
+// router.use(authController.protect);
 
-router.get('/', roomController.getAllRoom).post('/', roomController.createRoom);
+router
+  .route('/')
+  .get(roomController.getAllRoom)
+  .post(roomController.createRoom);
 
+router
+  .route('/:id')
+  .get(roomController.enterRoom)
+  .delete(roomController.removeRoom);
 module.exports = router;
