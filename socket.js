@@ -4,7 +4,7 @@ module.exports = (server, app) => {
   const io = SocketIO(server, {
     path: '/socket.io',
     cors: {
-      origin: 'http://127.0.0.1:5500', //프론트 개발 도메인
+      origin: '*', //프론트 개발 도메인
       methods: ['GET', 'POST'],
     },
   });

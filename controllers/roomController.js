@@ -36,7 +36,7 @@ exports.getAllRoom = catchAsync(async (req, res, next) => {
 
 exports.enterRoom = catchAsync(async (req, res, next) => {
   const room = await Room.findById(req.params.id);
-  const user = await User.findById('642cd7e483adb56ba6feb015'); // 임시로 아이디 하드코딩
+  const user = await User.findById('642cd7e483adb56ba6feb015'); // 임시로 test4 아이디 하드코딩
 
   if (!room) {
     return next(new AppError('채팅방이 존재하지 않습니다.', 404));

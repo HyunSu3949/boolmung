@@ -4,7 +4,7 @@ const authController = require('../controllers/authController');
 
 const router = express.Router();
 
-// router.use(authController.protect);
+router.use(authController.protect);
 
 router
   .route('/')
@@ -13,7 +13,7 @@ router
 
 router
   .route('/:id')
-  .get(roomController.enterRoom)
+  .get(authController.protect, roomController.enterRoom)
   .delete(roomController.removeRoom);
 
 router.route('/:id/chat').post(roomController.sendChat);

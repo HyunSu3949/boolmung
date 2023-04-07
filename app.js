@@ -14,19 +14,23 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-app.use(cors());
-//프론트 경로
-// app.use(
-//   cors({
-//     origin: 'http://127.0.0.1:5500',
-//   })
-// );
-app.options('*', cors());
-
+app.use(cookieParser());
 app.use(express.json({ limit: '10kb' }));
 
+app.use(
+  cors({
+    origin: 'http://127.0.0.1:5500',
+    credentials: true,
+  })
+);
+
+app.options('*', cors());
+
 app.use(express.static(`${__dirname}/public`));
-app.use(cookieParser());
+
+app.use((req, res, next) => {
+  next();
+});
 
 // Routes
 app.use('/api/v1/users', userRouter);
