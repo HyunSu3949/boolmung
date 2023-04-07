@@ -13,7 +13,7 @@ router
 
 router
   .route('/:id')
-  .get(authController.protect, roomController.enterRoom)
+  .get(roomController.enterRoom)
   .delete(roomController.removeRoom);
 
 router.route('/:id/chat').post(roomController.sendChat);
