@@ -51,17 +51,11 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
     return next(new AppError('허용 인원을 초과하였습니다.', 404));
   }
 
-  // res.status(200).json({
-  //   status: 'success',
-  //   data: {
-  //     room,
-  //   },
-  // });
-
-  return res.render('chat', {
-    room,
-    title: room.title,
-    chats: [],
+  res.status(200).json({
+    status: 'success',
+    data: {
+      room,
+    },
   });
 });
 

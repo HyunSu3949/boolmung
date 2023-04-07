@@ -3,7 +3,10 @@ const SocketIO = require('socket.io');
 module.exports = (server, app) => {
   const io = SocketIO(server, {
     path: '/socket.io',
-    cors: { origin: '*', methods: ['GET', 'POST'] },
+    cors: {
+      origin: 'http://127.0.0.1:5500', //프론트 개발 도메인
+      methods: ['GET', 'POST'],
+    },
   });
 
   app.set('io', io);
@@ -26,7 +29,7 @@ module.exports = (server, app) => {
 
       socket.to(data).emit('join', {
         user: 'system',
-        chat: '입장하셨습니다.',
+        chat: `${socket.handshake.query.username}님이 입장하셨습니다.`,
       });
     });
 
