@@ -1,9 +1,9 @@
-const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
-const User = require('./../models/userModel');
-const catchAsync = require('./../utils/catchAsync');
-const AppError = require('./../utils/appError');
-const { promisify } = require('util');
+const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
+const User = require("./../models/userModel");
+const catchAsync = require("./../utils/catchAsync");
+const AppError = require("./../utils/appError");
+const { promisify } = require("util");
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -19,15 +19,15 @@ const createSendToken = (user, statusCode, res) => {
     ),
     httpOnly: true,
   };
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
 
-  res.cookie('jwt', token, cookieOptions);
+  res.cookie("jwt", token, cookieOptions);
 
   // res에 password 제거
   user.password = undefined;
 
   res.status(statusCode).json({
-    status: 'success',
+    status: "success",
     token,
     data: {
       user,
@@ -51,13 +51,13 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // email, password 있는지 확인
   if (!email || !password) {
-    return next(new AppError('이메일과 비밀번호를 입력하세요', 400));
+    return next(new AppError("이메일과 비밀번호를 입력하세요", 400));
   }
   // 이메일, 비밀번호 맞는지 확인
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({ email }).select("+password");
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('이메일 또는 비밀번호가 일치하지 않습니다', 401));
+    return next(new AppError("이메일 또는 비밀번호가 일치하지 않습니다", 401));
   }
 
   createSendToken(user, 200, res);
@@ -68,15 +68,15 @@ exports.protect = catchAsync(async (req, res, next) => {
   let token;
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
+    req.headers.authorization.startsWith("Bearer")
   ) {
-    token = req.headers.authorization.split(' ')[1];
+    token = req.headers.authorization.split(" ")[1];
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
 
   if (!token) {
-    return next(new AppError('토큰이 없습니다. 로그인이 필요합니다.', 401));
+    return next(new AppError("토큰이 없습니다. 로그인이 필요합니다.", 401));
   }
 
   // 토큰 검증
@@ -86,7 +86,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
     return next(
-      new AppError('토큰을 소유하고 있는 유저가 존재하지 않습니다.', 401)
+      new AppError("토큰을 소유하고 있는 유저가 존재하지 않습니다.", 401)
     );
   }
 
@@ -100,7 +100,7 @@ exports.restrictTo = (role) => {
     // roles ['admin', 'user']
     if (role !== req.user.role) {
       return next(
-        new AppError('권한이 없습니다. 관리자 계정으로 로그인 하세요', 403)
+        new AppError("권한이 없습니다. 관리자 계정으로 로그인 하세요", 403)
       );
     }
 
