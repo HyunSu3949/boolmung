@@ -1,15 +1,14 @@
-const crypto = require("crypto");
+// const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
-const User = require("./../models/userModel");
-const catchAsync = require("./../utils/catchAsync");
-const AppError = require("./../utils/appError");
 const { promisify } = require("util");
+const User = require("../models/userModel");
+const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/appError");
 
-const signToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+const signToken = (id) =>
+  jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
-};
 
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
@@ -95,15 +94,13 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.restrictTo = (role) => {
-  return (req, res, next) => {
-    // roles ['admin', 'user']
-    if (role !== req.user.role) {
-      return next(
-        new AppError("권한이 없습니다. 관리자 계정으로 로그인 하세요", 403)
-      );
-    }
+exports.restrictTo = (role) => (req, res, next) => {
+  // roles ['admin', 'user']
+  if (role !== req.user.role) {
+    return next(
+      new AppError("권한이 없습니다. 관리자 계정으로 로그인 하세요", 403)
+    );
+  }
 
-    next();
-  };
+  next();
 };

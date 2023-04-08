@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const chatSchema = new mongoose.Schema({
   room: {
     type: mongoose.Schema.ObjectId,
     required: true,
-    ref: 'Room',
+    ref: "Room",
   },
   user: {
     type: String,
@@ -17,4 +17,4 @@ const chatSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Chat', chatSchema);
+module.exports = mongoose.model("Chat", chatSchema);
