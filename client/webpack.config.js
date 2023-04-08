@@ -1,7 +1,7 @@
 const prod = process.env.NODE_ENV === "production";
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: prod ? "production" : "development",
@@ -17,7 +17,7 @@ module.exports = {
         resolve: {
           extensions: [".ts", ".tsx", ".js", ".json"],
         },
-        use: "ts-loader",
+        use: ["babel-loader", "ts-loader"],
       },
       {
         test: /\.css$/,
@@ -31,5 +31,12 @@ module.exports = {
       template: "index.html",
     }),
     new MiniCssExtractPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        // { from: "./src/images", to: "./images" },
+        // { from: "./src/models", to: "./models" },
+        // { from: "./src/sounds", to: "./sounds" }
+      ],
+    }),
   ],
 };
