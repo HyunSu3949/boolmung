@@ -37,6 +37,7 @@ export const useSignupForm = () => {
 
       return;
     }
+    alert("회원가입 완료!");
   };
 
   const password = watch("password", "");
