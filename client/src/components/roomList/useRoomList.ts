@@ -7,14 +7,14 @@ export const useRoomList = () => {
   const { isLogedIn } = useAuth();
 
   useEffect(() => {
-    (async () => {
-      try {
+    if (isLogedIn) {
+      (async () => {
         const result = await getAllRoom();
         setRoomList(result.data.data.data.map((room: any) => room.title));
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+      })();
+    } else {
+      setRoomList([]);
+    }
   }, [isLogedIn]);
 
   return { roomList };

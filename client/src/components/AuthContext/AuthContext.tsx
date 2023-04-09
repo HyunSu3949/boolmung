@@ -34,22 +34,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const checkLoginStatus = async () => {
-    try {
-      const response = await axiosInstance.get("/users/me");
-      console.log(response);
+    const response = await axiosInstance.get("/users/me");
 
-      if (response.data.status === "success") {
-        setCurrentUser(response.data.data);
-        console.log(response.data.data);
-      } else {
-        setCurrentUser(undefined);
-      }
-    } catch (error) {
-      console.error("Error checking login status:", error);
+    if (response.data.status === "success") {
+      setCurrentUser(response.data.data);
+      setIsLogedIn(true);
+    } else {
+      setCurrentUser(undefined);
+      setIsLogedIn(false);
     }
   };
 
   useEffect(() => {
+    //초기상태일때 검사 안함
     if (isLogedIn !== undefined) {
       checkLoginStatus();
     }

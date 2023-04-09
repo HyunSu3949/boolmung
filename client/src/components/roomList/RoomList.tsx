@@ -2,7 +2,7 @@ import React from "react";
 import { useRoomList } from "./useRoomList";
 
 export const RoomList: React.FC = () => {
-  const { roomList = [] } = useRoomList();
+  const { roomList } = useRoomList();
 
   return (
     <div>
