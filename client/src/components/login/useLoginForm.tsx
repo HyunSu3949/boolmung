@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { login } from "./../../apis/user/login";
+import { useAuth } from "../AuthContext/AuthContext";
 
 type FormData = {
   email: string;
@@ -13,10 +14,15 @@ export const useLoginForm = () => {
     formState: { errors },
     setError,
   } = useForm<FormData>();
+  const { setIsLogedIn } = useAuth();
 
   const onSubmit = async (data: FormData) => {
     try {
-      await login(data);
+      const result = await login(data);
+      console.log(result);
+      if (result.status === 200) {
+        setIsLogedIn(true);
+      }
     } catch (error: any) {
       if (
         error.response.data.message.includes(
@@ -28,7 +34,6 @@ export const useLoginForm = () => {
           message: "이메일 또는 비밀번호가 일치하지 않습니다",
         });
       }
-
       return;
     }
   };

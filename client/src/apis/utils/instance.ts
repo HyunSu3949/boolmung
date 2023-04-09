@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-const baseURL = "http://127.0.0.1:3000/api/v1"; // 개발 로컬주소
+const baseURL = "http://localhost:3000/api/v1"; // 개발 로컬주소
 
 const axiosInstance = axios.create({
   baseURL,
