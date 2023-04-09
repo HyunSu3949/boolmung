@@ -1,23 +1,9 @@
 import React from "react";
-import { useForm } from "react-hook-form";
-
-type FormData = {
-  name: string;
-  email: string;
-  password: string;
-  passwordConfirm: string;
-};
+import { useSignupForm } from "./useSignupForm";
 
 export const SignupForm: React.FC = () => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<FormData>();
-  const onSubmit = (data: FormData) => {};
-
-  const password = watch("password", "");
+  const { register, handleSubmit, errors, onSubmit, password } =
+    useSignupForm();
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
