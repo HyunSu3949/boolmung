@@ -29,15 +29,15 @@ module.exports = {
   devtool: prod ? undefined : "source-map",
   plugins: [
     new HtmlWebpackPlugin({
-      template: "index.html",
+      template: "./public/index.html",
     }),
     new MiniCssExtractPlugin(),
-    // new CopyWebpackPlugin({
-    //   patterns: [
-    //     // { from: "./src/images", to: "./images" },
-    //     // { from: "./src/models", to: "./models" },
-    //     // { from: "./src/sounds", to: "./sounds" }
-    //   ],
-    // }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "./public/img", to: "./img" },
+        // { from: "./src/models", to: "./models" },
+        // { from: "./src/sounds", to: "./sounds" }
+      ],
+    }),
   ],
 };
