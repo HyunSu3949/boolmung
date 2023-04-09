@@ -46,10 +46,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    //초기상태일때 검사 안함
-    if (isLogedIn !== undefined) {
-      checkLoginStatus();
-    }
+    checkLoginStatus();
   }, [isLogedIn]);
 
   return (
