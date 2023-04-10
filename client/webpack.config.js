@@ -21,8 +21,16 @@ module.exports = {
         use: ["babel-loader", "ts-loader"],
       },
       {
-        test: /\.css$/,
+        test: /\.(css)$/,
         use: [MiniCssExtractPlugin.loader, "css-loader"],
+      },
+      {
+        test: /\.(png|jpe?g|gif|glb|gltf)$/i,
+        loader: "file-loader",
+        options: {
+          publicPath: "./",
+          name: "[name].[ext]",
+        },
       },
     ],
   },
@@ -35,7 +43,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: "./public/img", to: "./img" },
-        // { from: "./src/models", to: "./models" },
+        { from: "./public/models", to: "./models" },
         // { from: "./src/sounds", to: "./sounds" }
       ],
     }),

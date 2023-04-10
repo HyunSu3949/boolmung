@@ -1,7 +1,7 @@
 import { io, Socket } from "socket.io-client";
 import axiosInstance from "../apis/utils/instance";
 
-const chatSocket: Socket = io("http://127.0.0.1:3000/chat", {
+export const chatSocket: Socket = io("http://127.0.0.1:3000/chat", {
   path: "/socket.io",
 });
 

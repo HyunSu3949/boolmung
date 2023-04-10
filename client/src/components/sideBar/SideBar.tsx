@@ -4,7 +4,7 @@ import { LoginForm } from "./../login/LoginForm";
 import { ProfileCard } from "../profileCard/ProfileCard";
 import { RoomRouter } from "../../router/RoomRouter";
 import { SignupModal } from "./../signup/SignupModal";
-
+import "./SideBar.css";
 export const SideBar: React.FC = () => {
   const { isLogedIn } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +16,7 @@ export const SideBar: React.FC = () => {
     setIsOpen(false);
   };
   return (
-    <div>
+    <div className="sideBar">
       {isLogedIn ? (
         <>
           <ProfileCard />
