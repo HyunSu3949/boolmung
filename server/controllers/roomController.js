@@ -10,6 +10,7 @@ exports.createRoom = catchAsync(async (req, res, next) => {
     title: req.body.title,
     max: req.body.max,
     owner: req.user.id,
+    participants: [req.user.id],
   });
 
   const io = req.app.get("io");
@@ -53,10 +54,17 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
     return next(new AppError("허용 인원을 초과하였습니다.", 404));
   }
 
+  if (!room.participants.includes(req.user.id)) {
+    // 새로운 참가자 추가
+    room.participants.push(req.user.id);
+    await room.save();
+  }
+
   io.of("/chat")
     .to(req.params.id)
     .emit("join", {
-      user: "system",
+      username: user.name,
+      participants: room.participants,
       chat: `${user.name}님이 입장하셨습니다.`,
     });
 
