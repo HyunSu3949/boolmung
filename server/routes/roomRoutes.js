@@ -19,6 +19,7 @@ router
 router
   .route("/:id/chat")
   .get(roomController.getChat)
-  .post(roomController.sendChat);
+  .post(roomController.sendChat)
+  .delete(roomController.exitRoom);
 
 module.exports = router;

@@ -76,6 +76,34 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.exitRoom = catchAsync(async (req, res, next) => {
+  const userId = req.user.id;
+  const roomId = req.params.id;
+
+  const room = await Room.findByIdAndDelete(
+    roomId,
+    {
+      $pull: {
+        participants: { user: userId },
+      },
+    },
+    { new: true }
+  );
+  io.of("/chat")
+    .to(roomId)
+    .emit("userExited", {
+      userId,
+      message: `User ${userId} has exited the room`,
+    });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      room,
+    },
+  });
+});
+
 exports.removeRoom = catchAsync(async (req, res, next) => {
   const room = await Room.findByIdAndDelete(req.params.id);
   const chat = await Chat.deleteMany({ room: req.params.id });
