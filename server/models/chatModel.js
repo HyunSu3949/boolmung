@@ -7,10 +7,14 @@ const chatSchema = new mongoose.Schema({
     ref: "Room",
   },
   user: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  message: {
     type: String,
     required: true,
   },
-  chat: String,
   createdAt: {
     type: Date,
     default: Date.now,

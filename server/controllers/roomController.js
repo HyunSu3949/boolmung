@@ -10,7 +10,7 @@ exports.createRoom = catchAsync(async (req, res, next) => {
     title: req.body.title,
     max: req.body.max,
     owner: req.user.id,
-    participants: [req.user.id],
+    participants: [{ user: req.user.id, joinedAt: Date.now() }],
   });
 
   const io = req.app.get("io");
@@ -56,7 +56,7 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
 
   if (!room.participants.includes(req.user.id)) {
     // 새로운 참가자 추가
-    room.participants.push(req.user.id);
+    room.participants.push({ user: req.user.id, joinedAt: Date.now() });
     await room.save();
   }
 
@@ -84,6 +84,12 @@ exports.removeRoom = catchAsync(async (req, res, next) => {
     return next(new AppError("채팅방이 존재하지 않습니다.", 404));
   }
 
+  req.app
+    .get("io")
+    .of("/chat")
+    .to(req.params.id)
+    .emit("roomDeleted", { message: "채팅방이 삭제되었습니다." });
+
   res.status(204).json({
     status: "success",
     data: "채팅방이 삭제되었습니다.",
@@ -100,4 +106,27 @@ exports.sendChat = catchAsync(async (req, res, next) => {
   });
   req.app.get("io").of("/chat").to(req.params.id).emit("chat", chat);
   res.send("ok");
+});
+
+exports.getChat = catchAsync(async (req, res, next) => {
+  const room = await Room.findById(req.params.id);
+
+  if (!room) {
+    return next(new AppError("채팅방이 존재하지 않습니다.", 404));
+  }
+
+  const participant = room.participants.find((p) => p.user.equals(req.user.id));
+  const joinedAt = participant.joinedAt;
+
+  const chats = await Chat.find({
+    room: req.params.id,
+    createdAt: { $gt: joinedAt },
+  }).populate("user");
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      chats,
+    },
+  });
 });
