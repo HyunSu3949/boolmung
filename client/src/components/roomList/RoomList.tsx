@@ -9,7 +9,10 @@ export const RoomList: React.FC = () => {
       <ul>
         {roomList.map((room: any) => (
           <li key={room.id} onClick={() => enterRoom(room.id)}>
-            {room.title}
+            <h2>{room.title}</h2>
+            <p>
+              참가자 : {room.participants.length}/{room.max}
+            </p>
           </li>
         ))}
       </ul>

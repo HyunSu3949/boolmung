@@ -10,13 +10,13 @@ import axiosInstance from "../../apis/utils/instance";
 
 type Context = {
   isLogedIn: boolean | undefined;
-  currentUser: object | undefined;
+  currentUser: { _id: string; name: string; email: string };
   handleLogout: () => void;
   setIsLogedIn: Dispatch<SetStateAction<boolean | undefined>>;
 };
 export const AuthContext: React.Context<Context> = createContext<Context>({
   isLogedIn: false,
-  currentUser: {},
+  currentUser: { _id: "", name: "", email: "" },
   handleLogout: () => undefined,
   setIsLogedIn: () => undefined,
 });
@@ -27,7 +27,11 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLogedIn, setIsLogedIn] = useState<boolean | undefined>(undefined);
-  const [currentUser, setCurrentUser] = useState(undefined);
+  const [currentUser, setCurrentUser] = useState({
+    _id: "",
+    name: "",
+    email: "",
+  });
 
   const handleLogout = () => {
     setIsLogedIn(false);
@@ -37,10 +41,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const response = await axiosInstance.get("/users/me");
 
     if (response.data.status === "success") {
-      setCurrentUser(response.data.data);
+      setCurrentUser(response.data.data.data);
       setIsLogedIn(true);
     } else {
-      setCurrentUser(undefined);
+      setCurrentUser({ _id: "", name: "", email: "" });
       setIsLogedIn(false);
     }
   };

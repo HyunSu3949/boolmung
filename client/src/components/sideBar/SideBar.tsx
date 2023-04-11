@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext/AuthContext";
 import { LoginForm } from "./../login/LoginForm";
 import { ProfileCard } from "../profileCard/ProfileCard";
 import { RoomRouter } from "../../router/RoomRouter";
 import { SignupModal } from "./../signup/SignupModal";
 import "./SideBar.css";
+
 export const SideBar: React.FC = () => {
   const { isLogedIn } = useAuth();
   const [isOpen, setIsOpen] = useState(false);

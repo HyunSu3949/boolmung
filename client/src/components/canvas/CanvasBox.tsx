@@ -5,12 +5,13 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import Fire from "./fire/fire";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import modelPath from "./../../../public/models/ilbuni.glb";
-import { chatSocket } from "../../socket/socket";
+import { useSocket } from "../AuthContext/SocketContext";
 
 export default function CanvasBox() {
   const [characters, setCharacters] = useState([]);
+  const chatSocket = useSocket();
   useEffect(() => {
-    chatSocket.on("join", (userData) => {
+    chatSocket?.on("join", (userData) => {
       const newPosition = [Math.random() * 10, 0, Math.random() * 10];
       setCharacters((prev) => [...prev, { position: newPosition }]);
     });
