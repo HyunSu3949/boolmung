@@ -9,13 +9,13 @@ import { useSocket } from "../AuthContext/SocketContext";
 
 export default function CanvasBox() {
   const [characters, setCharacters] = useState([]);
-  const chatSocket = useSocket();
+  const { chatSocket } = useSocket();
   useEffect(() => {
     chatSocket?.on("join", (userData) => {
       const newPosition = [Math.random() * 10, 0, Math.random() * 10];
       setCharacters((prev) => [...prev, { position: newPosition }]);
     });
-  }, []);
+  }, [chatSocket]);
   return (
     <Canvas camera={{ position: [0, 0, 5], fov: 90 }}>
       <Suspense fallback={null}>

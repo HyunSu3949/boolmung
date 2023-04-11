@@ -50,8 +50,6 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
   const io = req.app.get("io");
   const { rooms } = io.of("/chat").adapter;
 
-  console.log(rooms.get(req.params.id)?.size);
-
   if (room.max < rooms.get(req.params.id)?.size) {
     return next(new AppError("허용 인원을 초과하였습니다.", 404));
   }
@@ -69,7 +67,6 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
       participants: room.participants,
       chat: `${user.name}님이 입장하셨습니다.`,
     });
-  console.log(rooms.get(req.params.id)?.size);
 
   res.status(200).json({
     status: "success",
@@ -133,7 +130,7 @@ exports.sendChat = catchAsync(async (req, res, next) => {
   const chat = await Chat.create({
     room: req.params.id,
     user: req.user.id,
-    chat: req.body.chat,
+    message: req.body.message,
   });
   req.app.get("io").of("/chat").to(req.params.id).emit("chat", chat);
   res.send("ok");
