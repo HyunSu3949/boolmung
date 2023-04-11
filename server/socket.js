@@ -25,7 +25,6 @@ module.exports = (server, app) => {
 
   chat.on("connection", (socket) => {
     console.log("chat 네임스페이스에 접속");
-
     socket.on("join", (data) => {
       console.log(data);
       console.log("join 이벤트 발생");
@@ -34,11 +33,14 @@ module.exports = (server, app) => {
         roomId: data.roomId,
       };
       socket.join(data.roomId);
+      const room = chat.adapter.rooms.get(data.roomId);
+      const participantCount = room ? room.size : 0;
+      console.log(`참가자 수: ${participantCount}`);
     });
 
     socket.on("disconnect", async () => {
       console.log("chat 네임스페이스 접속 해제");
-      const { userId, roomId } = socketUserMap[socket.id];
+      const { userId = "", roomId } = socketUserMap[socket.id];
       const room = await Room.findByIdAndUpdate(
         roomId,
         {
@@ -48,6 +50,18 @@ module.exports = (server, app) => {
         },
         { new: true }
       );
+
+      if (room.participants === 0) {
+        await Room.findByIdAndDelete(roomId);
+        socket
+          .to(roomId)
+          .emit("roomDeleted", { message: "채팅방이 삭제되었습니다." });
+      } else {
+        socket.to(roomId).emit("exit", {
+          user: "system",
+          chat: `${userId}님이 퇴장하셨습니다.`,
+        });
+      }
     });
   });
 };
