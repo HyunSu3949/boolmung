@@ -120,7 +120,7 @@ export function Character() {
       const moveZ = walkDirection.z * 2 * delta;
       model.scene.position.x += moveX;
       model.scene.position.z += moveZ;
-      // updateCameraTarget(moveX, moveZ);
+      updateCameraTarget(moveX, moveZ);
       console.log(model.scene.position.x, model.scene.position.z);
     }
   });

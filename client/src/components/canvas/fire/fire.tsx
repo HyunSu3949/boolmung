@@ -112,7 +112,7 @@ export default function Fire({ ...props }) {
   return (
     <mesh ref={ref} {...props}>
       <boxGeometry />
-      <fireMaterial transparent depthWrite={false} depthTest={false} />
+      <fireMaterial transparent depthWrite={true} depthTest={true} />
     </mesh>
   );
 }

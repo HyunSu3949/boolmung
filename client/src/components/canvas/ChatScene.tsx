@@ -1,12 +1,12 @@
-//@ts-nocheck
 import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, useHelper } from "@react-three/drei";
 import Fire from "./fire/fire";
 import { CharacterArrangement } from "./character/CharacterArrangement";
-export default function CanvasBox() {
-  useEffect(() => {}, []);
+import { Floor } from "./common/Floor";
+import { Lights } from "./common/Light";
 
+export default function ChatScene() {
   return (
     <Canvas camera={{ position: [0, 2, 10], fov: 90 }}>
       <Suspense fallback={null}>
@@ -20,21 +20,3 @@ export default function CanvasBox() {
     </Canvas>
   );
 }
-
-const Floor = () => {
-  return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.6, 0]}>
-      <planeGeometry args={[30, 30]} />
-      <meshStandardMaterial color="gray" />
-    </mesh>
-  );
-};
-
-const Lights = () => {
-  return (
-    <>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[5, 5, 5]} intensity={1} />
-    </>
-  );
-};

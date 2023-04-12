@@ -8,7 +8,12 @@ import React, {
 import { io, Socket } from "socket.io-client";
 import { useAuth } from "./AuthContext";
 import { useCharacter } from "../canvas/character/useCharacter";
-
+import {
+  connectChat,
+  disconnectChat,
+  addChatSocketEvent,
+} from "../../socket/chatSocket";
+import { connectRoom, disconnectRoom } from "../../socket/roomSocket";
 type SocketContextType = {
   connectChat: () => void;
   disconnectChat: () => void;
@@ -27,17 +32,6 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [roomSocket, setRoomSocket] = useState<Socket | null>(null);
   const [chatSocket, setChatSocket] = useState<Socket | null>(null);
   const [participants, setParticipants] = useState([]);
-
-  const connectRoom = () => {
-    const roomSocket = io("http://127.0.0.1:3000/room", {
-      path: "/socket.io",
-    });
-    setRoomSocket(roomSocket);
-  };
-
-  const disconnectRoom = () => {
-    chatSocket?.disconnect();
-  };
 
   const connectChat = () => {
     const chatSocket = io("http://127.0.0.1:3000/chat", {
@@ -61,10 +55,10 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (isLogedIn) {
-      connectRoom();
+      connectRoom(setRoomSocket);
     }
     return () => {
-      disconnectRoom();
+      if (roomSocket) disconnectRoom(roomSocket);
     };
   }, [isLogedIn]);
 

@@ -10,7 +10,7 @@ type Chat = {
   message: string;
 };
 
-export const Room: React.FC = () => {
+export const ChatWindow: React.FC = () => {
   const { connectChat, disconnectChat, chatSocket } = useSocket();
   const [chats, setChats] = useState<Chat[]>([]);
   const [message, setMessage] = useState("");
