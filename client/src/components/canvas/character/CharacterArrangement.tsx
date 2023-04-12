@@ -8,10 +8,6 @@ export const CharacterArrangement = () => {
 
   return (
     <>
-      {/* {positions.map((ch, idx) => (
-        <Character key={idx} position={ch.position} />
-      ))} */}
-      {/* <Character position={[1, 0, 1]} /> */}
       <Character />
     </>
   );

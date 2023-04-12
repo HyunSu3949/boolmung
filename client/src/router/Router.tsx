@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HomePage } from "../components/pages/HomePage";
-import { ChatRoomPage } from "./../components/pages/ChatRoomPage";
+import { ChatRoomPage } from "../components/pages/ChatRoomPage";
 
-export const RoomRouter = () => {
+export const Router = () => {
   return (
     <BrowserRouter>
       <Routes>

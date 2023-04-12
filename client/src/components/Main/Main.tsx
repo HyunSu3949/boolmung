@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAuth } from "../AuthContext/AuthContext";
 import { LoginForm } from "../login/LoginForm";
-import { RoomRouter } from "../../router/RoomRouter";
+import { Router } from "../../router/Router";
 import { SignupModal } from "../signup/SignupModal";
 import "./Main.css";
 import LogoutScene from "../canvas/LogoutScene";
@@ -22,7 +22,7 @@ export const Main: React.FC = () => {
       {isLogedIn ? (
         <>
           <LoginScene />
-          <RoomRouter />
+          <Router />
         </>
       ) : (
         <>

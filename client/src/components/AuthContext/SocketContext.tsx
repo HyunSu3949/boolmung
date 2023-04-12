@@ -1,18 +1,7 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  Dispatch,
-} from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
 import { useAuth } from "./AuthContext";
-import { useCharacter } from "../canvas/character/useCharacter";
-import {
-  connectChat,
-  disconnectChat,
-  addChatSocketEvent,
-} from "../../socket/chatSocket";
+import { connectChat, disconnectChat } from "../../socket/chatSocket";
 import { connectRoom, disconnectRoom } from "../../socket/roomSocket";
 type SocketContextType = {
   connectChat: () => void;
@@ -49,6 +38,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       setParticipants(data.participants);
     });
   };
+
   const disconnectChat = () => {
     chatSocket?.disconnect();
   };

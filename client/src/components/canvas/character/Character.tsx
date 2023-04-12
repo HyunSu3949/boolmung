@@ -103,7 +103,6 @@ export function Character() {
         right,
       });
 
-      //
       rotateQuarternion.setFromAxisAngle(
         rotateAngle,
         angleYCameraDirection + newDirectionOffset
@@ -127,7 +126,7 @@ export function Character() {
   return (
     <>
       <OrbitControls ref={controlsRef} />
-      <primitive object={scene}></primitive>
+      <primitive object={scene} />
     </>
   );
 }
