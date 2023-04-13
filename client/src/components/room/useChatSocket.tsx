@@ -1,58 +1,87 @@
 import React, { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { useAuth } from "../AuthContext/AuthContext";
+import { useParams } from "react-router-dom";
 
 const Url = "http://127.0.0.1:3000/chat";
 const Path = "/socket.io";
 
-const connectChat = () => {
-  const chatSocket = io(Url, {
-    path: Path,
-  });
-  return chatSocket;
-};
-
 type Chat = {
-  name: string;
+  room: string;
+  user: string;
   message: string;
 };
 
-export const useChatSocket = (roomId: string) => {
+export const useChatSocket = () => {
   const [chatSocket, setChatSocket] = useState<Socket>();
-  const [usersInfo, setUsersInfo] = useState([]);
+  const [usersInfo, setUsersInfo] = useState({});
   const [chatList, setChatList] = useState<Chat[]>([]);
   const { currentUser } = useAuth();
+  const { id } = useParams();
 
   const connectChat = () => {
     const chatSocket = io(Url, {
       path: Path,
     });
-    return chatSocket;
+    chatSocket.emit("join", { userId: currentUser._id, roomId: id });
+    setChatSocket(chatSocket);
   };
 
   const joinCallback = (data: any) => {
     setUsersInfo(data);
   };
 
-  const chatCallback = (data: any) => {
-    setChatList((prev) => [...prev, data.message]);
+  const chatCallback = (data: Chat) => {
+    console.log(data);
+
+    setChatList((prev) => [...prev, data]);
   };
 
-  const emitChat = (message: string) => {
-    if (chatSocket)
-      chatSocket.emit("chat", { name: currentUser.name, message });
+  const moveCallback = (data: any) => {
+    console.log(data);
+
+    setUsersInfo({ ...usersInfo, ...data });
   };
+
+  const emitMove = (userId: string, position: any) => {
+    chatSocket?.emit("move", { [userId]: position });
+  };
+
+  const disconnectChat = () => {
+    console.log("dis!!!");
+
+    chatSocket?.disconnect();
+  };
+
+  const addSocketEvent = () => {
+    chatSocket?.on("join", joinCallback);
+    chatSocket?.on("chat", chatCallback);
+    chatSocket?.on("move", moveCallback);
+  };
+
+  const removeSocketEvent = () => {
+    chatSocket?.off("join", joinCallback);
+    chatSocket?.off("chat", chatCallback);
+    chatSocket?.off("move", moveCallback);
+  };
+
   useEffect(() => {
-    const chatSocket = connectChat();
-    setChatSocket(chatSocket);
+    if (!chatSocket) connectChat();
 
-    chatSocket.on("join", joinCallback);
-    chatSocket.on("chat", chatCallback);
+    addSocketEvent();
 
     return () => {
-      chatSocket.disconnect();
+      disconnectChat();
+      removeSocketEvent();
     };
-  }, []);
-
-  return { chatSocket, emitChat, chatList, usersInfo };
+  }, [chatSocket]);
+  return {
+    chatSocket,
+    chatList,
+    usersInfo,
+    connectChat,
+    addSocketEvent,
+    emitMove,
+    disconnectChat,
+  };
 };

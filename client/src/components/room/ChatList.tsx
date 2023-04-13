@@ -1,14 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 type Chat = {
-  name: string;
+  room: string;
+  user: string;
   message: string;
 };
-export const ChatList = ({ chats }: { chats: Chat[] }) => {
+export const ChatList = ({ chatList }: { chatList: Chat[] }) => {
   return (
     <div>
       <ul>
-        {chats.map((chat, idx) => (
+        {chatList.map((chat, idx) => (
           <li key={idx}>{chat.message}</li>
         ))}
       </ul>

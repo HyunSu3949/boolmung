@@ -91,9 +91,9 @@ exports.exitRoom = catchAsync(async (req, res, next) => {
   );
   io.of("/chat")
     .to(roomId)
-    .emit("userExited", {
+    .emit("exit", {
       userId,
-      message: `User ${userId} has exited the room`,
+      message: `${userId} 님이 퇴장했습니다.`,
     });
 
   res.status(200).json({
@@ -132,6 +132,7 @@ exports.sendChat = catchAsync(async (req, res, next) => {
     user: req.user.id,
     message: req.body.message,
   });
+  console.log(req.params.id);
   req.app.get("io").of("/chat").to(req.params.id).emit("chat", chat);
   res.send("ok");
 });

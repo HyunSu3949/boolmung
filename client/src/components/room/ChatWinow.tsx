@@ -3,12 +3,7 @@ import { useParams } from "react-router-dom";
 import { sendChat } from "../../apis/room/sendChat";
 import { ChatList } from "./ChatList";
 
-type PropsType = {
-  emitChat: (message: string) => void;
-  chatList: any[];
-};
-
-export const ChatWindow = ({ emitChat, chatList }: PropsType) => {
+export const ChatWindow = ({ chatList }: any) => {
   const { id: roomId = "" } = useParams();
   const [message, setMessage] = useState("");
 
@@ -18,15 +13,15 @@ export const ChatWindow = ({ emitChat, chatList }: PropsType) => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (message === "") return;
+
     sendChat(roomId, message);
-    emitChat(message);
     setMessage("");
   };
 
   return (
     <>
       <div>
-        <ChatList chats={chatList} />
+        <ChatList chatList={chatList} />
       </div>
       <form onSubmit={onSubmit}>
         <input onChange={onChange} type="text" value={message} />

@@ -2,9 +2,9 @@ import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useHelper } from "@react-three/drei";
 import Fire from "./fire/fire";
-import { CharacterArrangement } from "./character/CharacterArrangement";
 import { Floor } from "./common/Floor";
 import { Lights } from "./common/Light";
+import { Character } from "./character/Character";
 
 export default function ChatScene() {
   return (
@@ -12,8 +12,8 @@ export default function ChatScene() {
       <Suspense fallback={null}>
         <Fire scale={7} position={[0, 2.5, 0]} />
       </Suspense>
+      <Character />
       <Floor />
-      <CharacterArrangement />
       <OrbitControls />
       <Lights />
       <axesHelper args={[5]} />

@@ -25,22 +25,28 @@ module.exports = (server, app) => {
 
   chat.on("connection", (socket) => {
     console.log("chat 네임스페이스에 접속");
+
     socket.on("join", (data) => {
-      console.log(data);
       console.log("join 이벤트 발생");
+      console.log(data);
+      socket.join(data.roomId);
+
       socketUserMap[socket.id] = {
         userId: data.userId,
         roomId: data.roomId,
       };
-      socket.join(data.roomId);
-      const room = chat.adapter.rooms.get(data.roomId);
-      const participantCount = room ? room.size : 0;
-      console.log(`참가자 수: ${participantCount}`);
     });
 
     socket.on("disconnect", async () => {
       console.log("chat 네임스페이스 접속 해제");
-      const { userId = "", roomId } = socketUserMap[socket.id];
+      console.log(socketUserMap);
+
+      if (!socketUserMap[socket.id]) return;
+
+      const { userId, roomId } = socketUserMap[socket.id];
+
+      delete socketUserMap[socket.id];
+
       const room = await Room.findByIdAndUpdate(
         roomId,
         {

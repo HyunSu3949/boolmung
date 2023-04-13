@@ -14,7 +14,6 @@ export default function LoginScene() {
       <Suspense fallback={null}>
         <Fire scale={7} position={[0, 2.5, 0]} />
       </Suspense>
-      <Character />
       <Floor />
       <OrbitControls />
       <Lights />

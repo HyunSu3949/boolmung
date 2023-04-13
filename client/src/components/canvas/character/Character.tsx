@@ -4,6 +4,8 @@ import { useGLTF, useAnimations, OrbitControls } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useInput } from "../hooks/useInput";
 import { useFrame, useThree } from "@react-three/fiber";
+import { useChatSocket } from "../../room/useChatSocket";
+import { useAuth } from "../../AuthContext/AuthContext";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -52,10 +54,13 @@ const directionOffset = ({ forward, backward, left, right }: any) => {
 
 export function Character() {
   const { forward, backward, left, right } = useInput();
+  const { currentUser } = useAuth();
+
   const model = useGLTF("/models/player.glb") as GLTFResult;
   const currentAction = useRef("");
   const controlsRef = useRef<any>();
   const camera = useThree((state) => state.camera);
+  const { emitMove } = useChatSocket();
 
   model.scene.scale.set(1.2, 1.2, 1.2);
 
@@ -120,7 +125,10 @@ export function Character() {
       model.scene.position.x += moveX;
       model.scene.position.z += moveZ;
       updateCameraTarget(moveX, moveZ);
-      console.log(model.scene.position.x, model.scene.position.z);
+      emitMove(currentUser._id, {
+        x: model.scene.position.x,
+        z: model.scene.position.z,
+      });
     }
   });
   return (
