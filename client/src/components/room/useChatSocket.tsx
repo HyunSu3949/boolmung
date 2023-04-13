@@ -40,11 +40,7 @@ export const useChatSocket = () => {
   const moveCallback = (data: any) => {
     console.log(data);
 
-    setUsersInfo({ ...usersInfo, ...data });
-  };
-
-  const emitMove = (userId: string, position: any) => {
-    chatSocket?.emit("move", { [userId]: position });
+    setUsersInfo({ ...usersInfo, [data.userId]: data.position });
   };
 
   const disconnectChat = () => {
@@ -81,7 +77,6 @@ export const useChatSocket = () => {
     usersInfo,
     connectChat,
     addSocketEvent,
-    emitMove,
     disconnectChat,
   };
 };

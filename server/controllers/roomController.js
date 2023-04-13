@@ -79,6 +79,7 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
 exports.exitRoom = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const roomId = req.params.id;
+  const io = req.app.get("io");
 
   const room = await Room.findByIdAndDelete(
     roomId,
@@ -158,4 +159,15 @@ exports.getChat = catchAsync(async (req, res, next) => {
       chats,
     },
   });
+});
+
+exports.movePosition = catchAsync(async (req, res, next) => {
+  const io = req.app.get("io");
+
+  io.of("/chat").to(req.params.id).emit("move", {
+    userId: req.user.id,
+    position: req.body,
+  });
+
+  res.send("ok");
 });
