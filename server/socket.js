@@ -2,7 +2,7 @@ const SocketIO = require("socket.io");
 const Room = require("./models/roomModel");
 
 const socketUserMap = {};
-
+const actionState = {};
 module.exports = (server, app) => {
   const io = SocketIO(server, {
     path: "/socket.io",
@@ -25,16 +25,42 @@ module.exports = (server, app) => {
 
   chat.on("connection", (socket) => {
     console.log("chat 네임스페이스에 접속");
-
     socket.on("join", (data) => {
       console.log("join 이벤트 발생");
+      const { roomId, userId } = data;
       console.log(data);
       socket.join(data.roomId);
 
       socketUserMap[socket.id] = {
-        userId: data.userId,
-        roomId: data.roomId,
+        userId,
+        roomId,
       };
+
+      actionState[socket.id] = {
+        userId,
+        input: {
+          forward: false,
+          backward: false,
+          left: false,
+          right: false,
+        },
+        position: [0, 0, 0],
+      };
+      chat.to(roomId).emit("chat", {
+        type: "system",
+        message: `${userId} 님이 입장하셨습니다.`,
+      });
+      chat.to(roomId).emit("move", actionState);
+    });
+
+    socket.on("move", (data) => {
+      const { roomId, userId, input, position } = data;
+      actionState[socket.id] = {
+        userId,
+        input,
+        position,
+      };
+      chat.to(roomId).emit("move", actionState);
     });
 
     socket.on("disconnect", async () => {
@@ -46,6 +72,9 @@ module.exports = (server, app) => {
       const { userId, roomId } = socketUserMap[socket.id];
 
       delete socketUserMap[socket.id];
+      delete actionState[socket.id];
+
+      chat.to(roomId).emit("move", actionState);
 
       const room = await Room.findByIdAndUpdate(
         roomId,

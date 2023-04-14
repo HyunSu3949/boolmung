@@ -161,13 +161,13 @@ exports.getChat = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.movePosition = catchAsync(async (req, res, next) => {
+exports.sendAction = catchAsync(async (req, res, next) => {
   const io = req.app.get("io");
 
-  io.of("/chat").to(req.params.id).emit("move", {
-    userId: req.user.id,
-    position: req.body,
-  });
+  // io.of("/chat").to(req.params.id).emit("move", {
+  //   userId: req.user.id,
+  //   action: req.body,
+  // });
 
   res.send("ok");
 });

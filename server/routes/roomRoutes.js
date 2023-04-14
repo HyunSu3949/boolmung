@@ -22,6 +22,6 @@ router
   .post(roomController.sendChat)
   .delete(roomController.exitRoom);
 
-router.route("/:id/move").post(roomController.movePosition);
+router.route("/:id/move").post(roomController.sendAction);
 
 module.exports = router;

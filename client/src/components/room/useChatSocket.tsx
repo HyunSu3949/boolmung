@@ -14,7 +14,7 @@ type Chat = {
 
 export const useChatSocket = () => {
   const [chatSocket, setChatSocket] = useState<Socket>();
-  const [usersInfo, setUsersInfo] = useState({});
+  const [actionInfo, setActionInfo] = useState({});
   const [chatList, setChatList] = useState<Chat[]>([]);
   const { currentUser } = useAuth();
   const { id } = useParams();
@@ -28,7 +28,7 @@ export const useChatSocket = () => {
   };
 
   const joinCallback = (data: any) => {
-    setUsersInfo(data);
+    console.log(data);
   };
 
   const chatCallback = (data: Chat) => {
@@ -38,9 +38,7 @@ export const useChatSocket = () => {
   };
 
   const moveCallback = (data: any) => {
-    console.log(data);
-
-    setUsersInfo({ ...usersInfo, [data.userId]: data.position });
+    setActionInfo(data);
   };
 
   const disconnectChat = () => {
@@ -74,7 +72,7 @@ export const useChatSocket = () => {
   return {
     chatSocket,
     chatList,
-    usersInfo,
+    actionInfo,
     connectChat,
     addSocketEvent,
     disconnectChat,

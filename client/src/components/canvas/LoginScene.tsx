@@ -4,7 +4,6 @@ import { OrbitControls, useHelper } from "@react-three/drei";
 import Fire from "./fire/fire";
 import { Floor } from "./common/Floor";
 import { Lights } from "./common/Light";
-import { Character } from "./character/Character";
 
 export default function LoginScene() {
   useEffect(() => {}, []);

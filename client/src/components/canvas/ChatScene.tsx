@@ -4,19 +4,21 @@ import { OrbitControls, useHelper } from "@react-three/drei";
 import Fire from "./fire/fire";
 import { Floor } from "./common/Floor";
 import { Lights } from "./common/Light";
-import { Character } from "./character/Character";
+import { MyCharacter } from "./character/MyCharacter";
+import { Others } from "./character/Others";
 
-export default function ChatScene() {
+export const ChatScene = ({ actionInfo, chatSocket }: any) => {
   return (
     <Canvas camera={{ position: [0, 2, 10], fov: 90 }}>
       <Suspense fallback={null}>
         <Fire scale={7} position={[0, 2.5, 0]} />
       </Suspense>
-      <Character />
+      <MyCharacter chatSocket={chatSocket} />
+      <Others actionInfo={actionInfo} />
       <Floor />
       <OrbitControls />
       <Lights />
       <axesHelper args={[5]} />
     </Canvas>
   );
-}
+};

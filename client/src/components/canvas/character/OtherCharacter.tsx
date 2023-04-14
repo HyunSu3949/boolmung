@@ -1,30 +1,14 @@
 import * as THREE from "three";
-import React, { useEffect, useRef } from "react";
-import { useGLTF, useAnimations, OrbitControls } from "@react-three/drei";
-import { GLTF } from "three-stdlib";
-import { useInput } from "../hooks/useInput";
-import { useFrame, useThree } from "@react-three/fiber";
-import { throttledMovePosition } from "../../../apis/room/movePosition";
-import { useParams } from "react-router-dom";
-
-type GLTFResult = GLTF & {
-  nodes: {
-    Cube: THREE.SkinnedMesh;
-    Bone: THREE.Bone;
-    Bone003: THREE.Bone;
-    Bone005: THREE.Bone;
-  };
-  materials: {
-    Material: THREE.MeshStandardMaterial;
-  };
-};
+import React, { useEffect, useRef, useMemo } from "react";
+import { useGLTF, useAnimations, Clone } from "@react-three/drei";
+import { useFrame, useThree, useGraph } from "@react-three/fiber";
+import { SkeletonUtils } from "three-stdlib";
 
 type ActionName = "default" | "walk" | "";
 
 let walkDirection = new THREE.Vector3();
 let rotateAngle = new THREE.Vector3(0, 1, 0);
 let rotateQuarternion = new THREE.Quaternion();
-let cameraTarget = new THREE.Vector3();
 
 const directionOffset = ({ forward, backward, left, right }: any) => {
   let directionOffset = 0; //기본 w
@@ -52,28 +36,18 @@ const directionOffset = ({ forward, backward, left, right }: any) => {
   return directionOffset;
 };
 
-export function Character() {
-  const { forward, backward, left, right } = useInput();
-
-  const model = useGLTF("/models/player.glb") as GLTFResult;
+export const OtherCharacter = ({ model, input, id, position }: any) => {
+  const { forward, backward, left, right } = input;
   const currentAction = useRef("");
-  const controlsRef = useRef<any>();
   const camera = useThree((state) => state.camera);
-  const { id = "" } = useParams();
-  model.scene.scale.set(1.2, 1.2, 1.2);
 
   const { animations, scene } = model;
-  const { actions } = useAnimations<any>(animations, scene);
+  const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
+  const { ref, actions } = useAnimations(animations);
 
-  const updateCameraTarget = (moveX: number, moveZ: number) => {
-    camera.position.x += moveX;
-    camera.position.z += moveZ;
+  clone.scale.set(1.2, 1.2, 1.2);
+  clone.position.set(position[0], position[1], position[2]);
 
-    cameraTarget.x = model.scene.position.x;
-    cameraTarget.y = model.scene.position.y + 2;
-    cameraTarget.z = model.scene.position.z;
-    if (controlsRef.current) controlsRef.current.target = cameraTarget;
-  };
   useEffect(() => {
     let action: ActionName = "";
 
@@ -95,8 +69,8 @@ export function Character() {
   useFrame((state, delta) => {
     if (currentAction.current == "walk") {
       let angleYCameraDirection = Math.atan2(
-        camera.position.x - model.scene.position.x,
-        camera.position.z - model.scene.position.z
+        camera.position.x - clone.position.x,
+        camera.position.z - clone.position.z
       );
 
       let newDirectionOffset = directionOffset({
@@ -111,7 +85,7 @@ export function Character() {
         angleYCameraDirection + newDirectionOffset
       );
 
-      model.scene.quaternion.rotateTowards(rotateQuarternion, 0.2);
+      clone.quaternion.rotateTowards(rotateQuarternion, 0.2);
 
       camera.getWorldDirection(walkDirection);
       walkDirection.y = 0;
@@ -120,22 +94,15 @@ export function Character() {
 
       const moveX = walkDirection.x * 2 * delta;
       const moveZ = walkDirection.z * 2 * delta;
-      model.scene.position.x += moveX;
-      model.scene.position.z += moveZ;
-
-      throttledMovePosition(id, [
-        model.scene.position.x,
-        (model.scene.position.z += moveZ),
-      ]);
-      updateCameraTarget(moveX, moveZ);
+      clone.position.x += moveX;
+      clone.position.z += moveZ;
     }
   });
   return (
     <>
-      <OrbitControls ref={controlsRef} />
-      <primitive object={scene} />
+      <primitive object={clone} ref={ref} />
     </>
   );
-}
+};
 
 useGLTF.preload("/models/player.glb");
