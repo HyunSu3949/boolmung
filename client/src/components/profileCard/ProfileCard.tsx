@@ -5,8 +5,11 @@ export const ProfileCard: React.FC = () => {
   const { currentUser, handleLogout } = useProfileCard();
 
   return (
-    <div>
-      <button onClick={handleLogout}>logout</button>
+    <div className="profile">
+      <div>{`${currentUser.name} 님`}</div>
+      <button onClick={handleLogout} className="logoutButton">
+        logout
+      </button>
     </div>
   );
 };

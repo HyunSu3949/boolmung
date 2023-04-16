@@ -44,7 +44,7 @@ module.exports = {
       patterns: [
         { from: "./public/img", to: "./img" },
         { from: "./public/models", to: "./models" },
-        // { from: "./src/sounds", to: "./sounds" }
+        { from: "./src/sound", to: "./sound" },
       ],
     }),
   ],

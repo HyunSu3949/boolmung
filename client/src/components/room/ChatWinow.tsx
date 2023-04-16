@@ -19,14 +19,19 @@ export const ChatWindow = ({ chatList }: any) => {
   };
 
   return (
-    <>
+    <div className="chatWindow">
       <div>
         <ChatList chatList={chatList} />
       </div>
-      <form onSubmit={onSubmit}>
-        <input onChange={onChange} type="text" value={message} />
-        <button>보내기</button>
+      <form onSubmit={onSubmit} className="chatForm">
+        <input
+          onChange={onChange}
+          type="text"
+          value={message}
+          className="chatInput"
+        />
+        <button className="chatButton">보내기</button>
       </form>
-    </>
+    </div>
   );
 };
