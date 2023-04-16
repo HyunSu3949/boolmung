@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useGLTF, useAnimations, OrbitControls } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useInput } from "./useInput";
@@ -22,9 +22,15 @@ type GLTFResult = GLTF & {
 type ActionName = "default" | "walk" | "";
 
 let walkDirection = new THREE.Vector3();
-let rotateAngle = new THREE.Vector3(0, 1, 0);
+let rotateAxis = new THREE.Vector3(0, 1, 0);
 let rotateQuarternion = new THREE.Quaternion();
 let cameraTarget = new THREE.Vector3();
+
+const roundToTwoDecimal = (number: number) => {
+  if (Math.abs(number) < 0.01) return 0;
+
+  return parseFloat(number.toFixed(2));
+};
 
 const directionOffset = ({ forward, backward, left, right }: any) => {
   let directionOffset = 0; //기본 w
@@ -56,13 +62,16 @@ export function MyCharacter({ chatSocket }: any) {
   const { currentUser } = useAuth();
   const { id } = useParams();
   const { forward, backward, left, right } = useInput();
-
+  const [cameraCharacterAngleY, setCameraCharacterAngleY] = useState<number>(0);
   const model = useGLTF("/models/player.glb") as GLTFResult;
   const currentAction = useRef("");
   const controlsRef = useRef<any>();
   const camera = useThree((state) => state.camera);
   model.scene.scale.set(1.2, 1.2, 1.2);
 
+  model.scene.traverse((obj: any) => {
+    if (obj.isMesh) obj.castShadow = true;
+  });
   const { animations, scene } = model;
   const { actions } = useAnimations<any>(animations, scene);
 
@@ -75,6 +84,7 @@ export function MyCharacter({ chatSocket }: any) {
     cameraTarget.z = model.scene.position.z;
     if (controlsRef.current) controlsRef.current.target = cameraTarget;
   };
+
   useEffect(() => {
     let action: ActionName = "";
 
@@ -91,6 +101,7 @@ export function MyCharacter({ chatSocket }: any) {
       nextActionToPlay?.reset().fadeIn(0.2).play();
       currentAction.current = action;
     }
+
     chatSocket.emit("move", {
       roomId: id,
       userId: currentUser._id,
@@ -100,15 +111,36 @@ export function MyCharacter({ chatSocket }: any) {
         model.scene.position.y,
         model.scene.position.z,
       ],
+      cameraCharacterAngleY,
     });
-  }, [forward, backward, left, right]);
+  }, [forward, backward, left, right, cameraCharacterAngleY]);
 
-  useFrame((state, delta) => {
+  const elapsedTime = useRef(0);
+  useFrame((_, delta) => {
+    elapsedTime.current += delta;
+
     if (currentAction.current == "walk") {
-      let angleYCameraDirection = Math.atan2(
-        camera.position.x - model.scene.position.x,
-        camera.position.z - model.scene.position.z
+      const currentAngle = roundToTwoDecimal(
+        Math.atan2(
+          camera.position.x - model.scene.position.x,
+          camera.position.z - model.scene.position.z
+        )
       );
+
+      if (
+        elapsedTime.current >= 0.3 &&
+        currentAngle !== cameraCharacterAngleY
+      ) {
+        setCameraCharacterAngleY(
+          roundToTwoDecimal(
+            Math.atan2(
+              camera.position.x - model.scene.position.x,
+              camera.position.z - model.scene.position.z
+            )
+          )
+        );
+        elapsedTime.current = 0;
+      }
 
       let newDirectionOffset = directionOffset({
         forward,
@@ -118,28 +150,38 @@ export function MyCharacter({ chatSocket }: any) {
       });
 
       rotateQuarternion.setFromAxisAngle(
-        rotateAngle,
-        angleYCameraDirection + newDirectionOffset
+        rotateAxis,
+        currentAngle + newDirectionOffset
       );
 
       model.scene.quaternion.rotateTowards(rotateQuarternion, 0.2);
 
       camera.getWorldDirection(walkDirection);
-      walkDirection.y = 0;
-      walkDirection.normalize();
-      walkDirection.applyAxisAngle(rotateAngle, newDirectionOffset);
 
-      const moveX = walkDirection.x * 2 * delta;
-      const moveZ = walkDirection.z * 2 * delta;
+      //카메라와 캐릭터의 atan2 값으로 방향백터(move 방향)를 구함
+      let direction = new THREE.Vector3(
+        Math.sin(currentAngle),
+        0,
+        Math.cos(currentAngle)
+      );
+      direction.applyAxisAngle(rotateAxis, newDirectionOffset);
+
+      const moveX = -direction.x * 2 * delta;
+      const moveZ = -direction.z * 2 * delta;
+
       model.scene.position.x += moveX;
       model.scene.position.z += moveZ;
 
-      // updateCameraTarget(moveX, moveZ);
+      updateCameraTarget(moveX, moveZ);
     }
   });
   return (
     <>
-      <OrbitControls ref={controlsRef} />
+      <OrbitControls
+        ref={controlsRef}
+        maxPolarAngle={Math.PI / 2}
+        minPolarAngle={1.2}
+      />
       <primitive object={scene} />
     </>
   );

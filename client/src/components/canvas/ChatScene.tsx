@@ -1,7 +1,6 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, useHelper } from "@react-three/drei";
-import Fire from "./fire/fire";
+import { Fire } from "./fire/fire";
 import { Floor } from "./common/Floor";
 import { Lights } from "./common/Light";
 import { MyCharacter } from "./character/MyCharacter";
@@ -16,7 +15,6 @@ export const ChatScene = ({ actionInfo, chatSocket }: any) => {
       <MyCharacter chatSocket={chatSocket} />
       <Others actionInfo={actionInfo} />
       <Floor />
-      <OrbitControls />
       <Lights />
       <axesHelper args={[5]} />
     </Canvas>

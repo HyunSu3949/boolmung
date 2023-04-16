@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import Fire from "./fire/fire";
+import { Fire } from "./fire/fire";
 import { Floor } from "./common/Floor";
 import { Lights } from "./common/Light";
 

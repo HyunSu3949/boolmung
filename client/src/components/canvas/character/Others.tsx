@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Clone, useGLTF } from "@react-three/drei";
+import React from "react";
+import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
-import { useFrame } from "@react-three/fiber";
 import { OtherCharacter } from "./OtherCharacter";
 import { useAuth } from "../../AuthContext/AuthContext";
-import { useChatSocket } from "../../room/useChatSocket";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -29,15 +27,7 @@ export const Others = ({ actionInfo }: any) => {
   const characters = othersInfo.map((data: any) => {
     const [socketId, state] = data;
 
-    return (
-      <OtherCharacter
-        key={state.userId}
-        model={model}
-        input={state.input}
-        id={state.userId}
-        position={state.position}
-      />
-    );
+    return <OtherCharacter key={state.userId} model={model} state={state} />;
   });
   return <>{characters}</>;
 };

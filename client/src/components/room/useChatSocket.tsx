@@ -42,8 +42,6 @@ export const useChatSocket = () => {
   };
 
   const disconnectChat = () => {
-    console.log("dis!!!");
-
     chatSocket?.disconnect();
   };
 

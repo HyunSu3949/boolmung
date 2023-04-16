@@ -1,11 +1,13 @@
-import axiosInstance from "../../apis/utils/instance";
 import { useAuth } from "../AuthContext/AuthContext";
+import { logout } from "../../apis/user/logout";
 
 export const useProfileCard = () => {
   const { currentUser, setIsLogedIn } = useAuth();
+
   const handleLogout = () => {
-    axiosInstance.get("/users/logout");
+    logout();
     setIsLogedIn(false);
   };
+
   return { handleLogout, currentUser };
 };

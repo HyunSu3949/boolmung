@@ -38,7 +38,6 @@ exports.getAllRoom = catchAsync(async (req, res, next) => {
 
 exports.enterRoom = catchAsync(async (req, res, next) => {
   const room = await Room.findById(req.params.id);
-  const user = await User.findById(req.user.id);
   if (!room) {
     return next(new AppError("채팅방이 존재하지 않습니다.", 404));
   }
@@ -47,10 +46,10 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
     return next(new AppError("비밀번호가 일지하지 않습니다.", 404));
   }
 
-  const io = req.app.get("io");
-  const { rooms } = io.of("/chat").adapter;
+  const chat = req.app.get("io").of("/chat");
+  const { rooms } = chat.adapter;
 
-  if (room.max < rooms.get(req.params.id)?.size) {
+  if (room.max < rooms.get(req.params.id).size) {
     return next(new AppError("허용 인원을 초과하였습니다.", 404));
   }
 
@@ -59,14 +58,6 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
     room.participants.push({ user: req.user.id, joinedAt: Date.now() });
     await room.save();
   }
-
-  io.of("/chat")
-    .to(req.params.id)
-    .emit("join", {
-      username: user.name,
-      participants: room.participants,
-      chat: `${user.name}님이 입장하셨습니다.`,
-    });
 
   res.status(200).json({
     status: "success",
@@ -79,7 +70,6 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
 exports.exitRoom = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const roomId = req.params.id;
-  const io = req.app.get("io");
 
   const room = await Room.findByIdAndDelete(
     roomId,
@@ -90,12 +80,6 @@ exports.exitRoom = catchAsync(async (req, res, next) => {
     },
     { new: true }
   );
-  io.of("/chat")
-    .to(roomId)
-    .emit("exit", {
-      userId,
-      message: `${userId} 님이 퇴장했습니다.`,
-    });
 
   res.status(200).json({
     status: "success",
@@ -159,15 +143,4 @@ exports.getChat = catchAsync(async (req, res, next) => {
       chats,
     },
   });
-});
-
-exports.sendAction = catchAsync(async (req, res, next) => {
-  const io = req.app.get("io");
-
-  // io.of("/chat").to(req.params.id).emit("move", {
-  //   userId: req.user.id,
-  //   action: req.body,
-  // });
-
-  res.send("ok");
 });

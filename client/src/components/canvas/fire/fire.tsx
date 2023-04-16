@@ -89,7 +89,7 @@ class FireMaterial extends THREE.ShaderMaterial {
 
 extend({ FireMaterial });
 
-export default function Fire({ ...props }) {
+export const Fire = ({ ...props }: any) => {
   const ref = useRef();
   const texture = useLoader(THREE.TextureLoader, "/img/fire.png");
   useFrame((state) => {
@@ -115,4 +115,4 @@ export default function Fire({ ...props }) {
       <fireMaterial transparent depthWrite={true} depthTest={true} />
     </mesh>
   );
-}
+};

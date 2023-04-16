@@ -6,8 +6,7 @@ import { SkeletonUtils } from "three-stdlib";
 
 type ActionName = "default" | "walk" | "";
 
-let walkDirection = new THREE.Vector3();
-let rotateAngle = new THREE.Vector3(0, 1, 0);
+let rotateAxis = new THREE.Vector3(0, 1, 0);
 let rotateQuarternion = new THREE.Quaternion();
 
 const directionOffset = ({ forward, backward, left, right }: any) => {
@@ -36,10 +35,11 @@ const directionOffset = ({ forward, backward, left, right }: any) => {
   return directionOffset;
 };
 
-export const OtherCharacter = ({ model, input, id, position }: any) => {
+export const OtherCharacter = ({ model, state }: any) => {
+  const { input, position, cameraCharacterAngleY } = state;
+
   const { forward, backward, left, right } = input;
   const currentAction = useRef("");
-  const camera = useThree((state) => state.camera);
 
   const { animations, scene } = model;
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
@@ -68,11 +68,6 @@ export const OtherCharacter = ({ model, input, id, position }: any) => {
 
   useFrame((state, delta) => {
     if (currentAction.current == "walk") {
-      let angleYCameraDirection = Math.atan2(
-        camera.position.x - clone.position.x,
-        camera.position.z - clone.position.z
-      );
-
       let newDirectionOffset = directionOffset({
         forward,
         backward,
@@ -81,19 +76,22 @@ export const OtherCharacter = ({ model, input, id, position }: any) => {
       });
 
       rotateQuarternion.setFromAxisAngle(
-        rotateAngle,
-        angleYCameraDirection + newDirectionOffset
+        rotateAxis,
+        cameraCharacterAngleY + newDirectionOffset
       );
 
       clone.quaternion.rotateTowards(rotateQuarternion, 0.2);
 
-      camera.getWorldDirection(walkDirection);
-      walkDirection.y = 0;
-      walkDirection.normalize();
-      walkDirection.applyAxisAngle(rotateAngle, newDirectionOffset);
+      let direction = new THREE.Vector3(
+        Math.sin(cameraCharacterAngleY),
+        0,
+        Math.cos(cameraCharacterAngleY)
+      );
+      direction.applyAxisAngle(rotateAxis, newDirectionOffset);
 
-      const moveX = walkDirection.x * 2 * delta;
-      const moveZ = walkDirection.z * 2 * delta;
+      const moveX = -direction.x * 2 * delta;
+      const moveZ = -direction.z * 2 * delta;
+
       clone.position.x += moveX;
       clone.position.z += moveZ;
     }
