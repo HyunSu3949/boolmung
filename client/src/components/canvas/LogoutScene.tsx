@@ -10,7 +10,7 @@ export default function LogoutScene() {
   return (
     <Canvas camera={{ position: [0, 2, 10], fov: 90 }}>
       <Suspense fallback={null}>
-        <Fire scale={7} position={[0, 2.5, 0]} />
+        <Fire scale={7} position={[0, 3.0, 0]} />
         <Wood />
       </Suspense>
       <Floor />
