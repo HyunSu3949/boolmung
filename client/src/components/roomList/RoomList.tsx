@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { useRoomList } from "./useRoomList";
 import { CreateChatModal } from "./CreateChatModal/CreateChatModal";
+import { useRoomSocket } from "./useRoomSocket";
 
 export const RoomList: React.FC = () => {
   const { roomList, enterRoom } = useRoomList();
+  useRoomSocket();
+
   const [isOpen, setIsOpen] = useState(false);
+
   const openModal = () => {
     setIsOpen(true);
   };

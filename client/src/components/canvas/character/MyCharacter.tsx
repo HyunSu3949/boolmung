@@ -6,6 +6,7 @@ import { useInput } from "./useInput";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../AuthContext/AuthContext";
+import { directionOffset, roundToTwoDecimal } from "./utils";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -26,39 +27,7 @@ let rotateAxis = new THREE.Vector3(0, 1, 0);
 let rotateQuarternion = new THREE.Quaternion();
 let cameraTarget = new THREE.Vector3();
 
-const roundToTwoDecimal = (number: number) => {
-  if (Math.abs(number) < 0.01) return 0;
-
-  return parseFloat(number.toFixed(2));
-};
-
-const directionOffset = ({ forward, backward, left, right }: any) => {
-  let directionOffset = 0; //기본 w
-
-  if (forward) {
-    if (left) {
-      directionOffset = Math.PI / 4; //w+a ,45도 전환
-    } else if (right) {
-      directionOffset = -Math.PI / 4;
-    }
-  } else if (backward) {
-    if (left) {
-      directionOffset = Math.PI / 4 + Math.PI / 2; //s+a
-    } else if (right) {
-      directionOffset = -Math.PI / 4 + -Math.PI / 2;
-    } else {
-      directionOffset = Math.PI; //s
-    }
-  } else if (left) {
-    directionOffset = Math.PI / 2; //a
-  } else if (right) {
-    directionOffset = -Math.PI / 2; //d
-  }
-
-  return directionOffset;
-};
-
-export function MyCharacter({ chatSocket }: any) {
+export const MyCharacter = ({ chatSocket }: any) => {
   const { currentUser } = useAuth();
   const { id } = useParams();
   const { forward, backward, left, right } = useInput();
@@ -69,9 +38,6 @@ export function MyCharacter({ chatSocket }: any) {
   const camera = useThree((state) => state.camera);
   model.scene.scale.set(1.2, 1.2, 1.2);
 
-  model.scene.traverse((obj: any) => {
-    if (obj.isMesh) obj.castShadow = true;
-  });
   const { animations, scene } = model;
   const { actions } = useAnimations<any>(animations, scene);
 
@@ -185,6 +151,6 @@ export function MyCharacter({ chatSocket }: any) {
       <primitive object={scene} />
     </>
   );
-}
+};
 
 useGLTF.preload("/models/player.glb");

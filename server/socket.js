@@ -19,6 +19,7 @@ module.exports = (server, app) => {
 
   room.on("connection", (socket) => {
     console.log("room 네임스페이스에 접속");
+    room.emit("enter", {});
 
     socket.on("disconnect", () => {
       console.log("room 네임스페이스 접속 해제");

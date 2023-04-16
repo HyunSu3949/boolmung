@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { RoomList } from "../roomList/RoomList";
 import { ProfileCard } from "./../profileCard/ProfileCard";
-import { io } from "socket.io-client";
 import LoginScene from "../canvas/LoginScene";
 import { useAuth } from "../AuthContext/AuthContext";
 import LogoutScene from "./../canvas/LogoutScene";
 import { LoginForm } from "../login/LoginForm";
 import { SignupModal } from "../signup/SignupModal";
-
-const Url = "http://127.0.0.1:3000/room";
-const Path = "/socket.io";
 
 export const HomePage = () => {
   const { isLogedIn } = useAuth();
@@ -21,14 +17,6 @@ export const HomePage = () => {
   const closeModal = () => {
     setIsOpen(false);
   };
-  useEffect(() => {
-    const roomSocket = io(Url, {
-      path: Path,
-    });
-    return () => {
-      roomSocket.disconnect();
-    };
-  }, []);
 
   return (
     <>

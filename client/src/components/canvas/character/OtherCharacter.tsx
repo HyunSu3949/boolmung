@@ -1,39 +1,14 @@
 import * as THREE from "three";
 import React, { useEffect, useRef, useMemo } from "react";
-import { useGLTF, useAnimations, Clone } from "@react-three/drei";
-import { useFrame, useThree, useGraph } from "@react-three/fiber";
+import { useGLTF, useAnimations } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
+import { directionOffset } from "./utils";
 
 type ActionName = "default" | "walk" | "";
 
 let rotateAxis = new THREE.Vector3(0, 1, 0);
 let rotateQuarternion = new THREE.Quaternion();
-
-const directionOffset = ({ forward, backward, left, right }: any) => {
-  let directionOffset = 0; //기본 w
-
-  if (forward) {
-    if (left) {
-      directionOffset = Math.PI / 4; //w+a ,45도 전환
-    } else if (right) {
-      directionOffset = -Math.PI / 4;
-    }
-  } else if (backward) {
-    if (left) {
-      directionOffset = Math.PI / 4 + Math.PI / 2; //s+a
-    } else if (right) {
-      directionOffset = -Math.PI / 4 + -Math.PI / 2;
-    } else {
-      directionOffset = Math.PI; //s
-    }
-  } else if (left) {
-    directionOffset = Math.PI / 2; //a
-  } else if (right) {
-    directionOffset = -Math.PI / 2; //d
-  }
-
-  return directionOffset;
-};
 
 export const OtherCharacter = ({ model, state }: any) => {
   const { input, position, cameraCharacterAngleY } = state;
