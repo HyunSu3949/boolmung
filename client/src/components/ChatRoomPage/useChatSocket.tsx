@@ -3,7 +3,7 @@ import { io, Socket } from "socket.io-client";
 import { useAuth } from "../common/Context/AuthContext";
 import { useParams } from "react-router-dom";
 
-const Url = "http://127.0.0.1:3000/chat";
+const Url = "https://boolmung.herokuapp.com/chat";
 const Path = "/socket.io";
 
 type Chat = {
