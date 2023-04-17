@@ -10,9 +10,8 @@ exports.createRoom = catchAsync(async (req, res, next) => {
     title: req.body.title,
     max: req.body.max,
     owner: req.user.id,
-    participants: [],
+    participants: [{ user: req.user.id }],
   });
-
   const io = req.app.get("io");
   io.of("/room").emit("newRoom", newRoom);
 

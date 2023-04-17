@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { useRoomList } from "./useRoomList";
 import { CreateChatModal } from "../CreateChatModal/CreateChatModal";
 import { useRoomSocket } from "./useRoomSocket";
 import "./RoomList.css";
-
+type RoomInfo = {
+  _id: string;
+  owner: string;
+  title: string;
+  max: number;
+  participants: string[];
+};
 export const RoomList: React.FC = () => {
-  const { roomList, enterRoom } = useRoomList();
-  useRoomSocket();
+  const { roomList, enterRoom } = useRoomSocket();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -21,11 +25,11 @@ export const RoomList: React.FC = () => {
     <>
       <div className="roomListBox">
         <ul className="roomUl">
-          {roomList.map((room: any) => (
+          {roomList.map((room: RoomInfo) => (
             <li
               className="roomLi"
-              key={room.id}
-              onClick={() => enterRoom(room.id)}
+              key={room._id}
+              onClick={() => enterRoom(room._id)}
             >
               <h2 className="roomTitle">{room.title}</h2>
               <p className="roomInfo">

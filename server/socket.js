@@ -92,11 +92,9 @@ module.exports = (server, app) => {
       );
 
       console.log(room.participants);
-      if (room.participants === 0) {
+      if (room.participants.length === 0) {
         await Room.findByIdAndDelete(roomId);
-        chat
-          .to(roomId)
-          .emit("roomDeleted", { message: "채팅방이 삭제되었습니다." });
+        io.of("/room").emit("roomDeleted", roomId);
       } else {
         chat.to(roomId).emit("chat", {
           type: "system",
