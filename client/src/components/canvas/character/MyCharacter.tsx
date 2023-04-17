@@ -6,7 +6,11 @@ import { useInput } from "./useInput";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../common/Context/AuthContext";
-import { directionOffset, roundToTwoDecimal } from "./utils";
+import {
+  directionOffset,
+  roundToTwoDecimal,
+  generateInitialPosition,
+} from "./utils";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -31,11 +35,13 @@ export const MyCharacter = ({ chatSocket }: any) => {
   const { currentUser } = useAuth();
   const { id } = useParams();
   const { forward, backward, left, right } = useInput();
+  const camera = useThree((state) => state.camera);
+
   const [cameraCharacterAngleY, setCameraCharacterAngleY] = useState<number>(0);
-  const model = useGLTF("/models/player.glb") as GLTFResult;
   const currentAction = useRef("");
   const controlsRef = useRef<any>();
-  const camera = useThree((state) => state.camera);
+
+  const model = useGLTF("/models/player.glb") as GLTFResult;
   model.scene.scale.set(1.2, 1.2, 1.2);
 
   const { animations, scene } = model;
@@ -50,6 +56,14 @@ export const MyCharacter = ({ chatSocket }: any) => {
     cameraTarget.z = model.scene.position.z;
     if (controlsRef.current) controlsRef.current.target = cameraTarget;
   };
+
+  useEffect(() => {
+    const initialPosition = generateInitialPosition();
+    model.scene.position.x = initialPosition.x;
+    model.scene.position.z = initialPosition.z;
+
+    console.log(initialPosition.x, initialPosition.z);
+  }, []);
 
   useEffect(() => {
     let action: ActionName = "";
@@ -135,10 +149,14 @@ export const MyCharacter = ({ chatSocket }: any) => {
       const moveX = -direction.x * 2 * delta;
       const moveZ = -direction.z * 2 * delta;
 
-      model.scene.position.x += moveX;
-      model.scene.position.z += moveZ;
+      const newX = model.scene.position.x + moveX;
+      const newZ = model.scene.position.z + moveZ;
 
-      updateCameraTarget(moveX, moveZ);
+      if (!(newX > -2.5 && newX < 2.5 && newZ > -2.5 && newZ < 2.5)) {
+        model.scene.position.x = newX;
+        model.scene.position.z = newZ;
+        updateCameraTarget(moveX, moveZ);
+      }
     }
   });
   return (

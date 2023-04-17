@@ -92,7 +92,7 @@ module.exports = (server, app) => {
       );
 
       console.log(room.participants);
-      if (room.participants.length === 0) {
+      if (room.participants === 0) {
         await Room.findByIdAndDelete(roomId);
         chat
           .to(roomId)

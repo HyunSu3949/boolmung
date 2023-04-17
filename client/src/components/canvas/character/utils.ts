@@ -41,3 +41,14 @@ export const roundToTwoDecimal = (number: number) => {
 
   return parseFloat(number.toFixed(2));
 };
+
+export const generateInitialPosition = () => {
+  let x, z;
+
+  do {
+    x = Math.random() * 8 - 4;
+    z = Math.random() * 8 - 4;
+  } while ((x > -2 && x < 2) || (z > -2 && z < 2));
+
+  return { x, z };
+};
