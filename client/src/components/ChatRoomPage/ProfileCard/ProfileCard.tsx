@@ -1,8 +1,14 @@
 import React from "react";
-import { useProfileCard } from "./useProfileCard";
+import { useAuth } from "../../common/Context/AuthContext";
+import { logout } from "../../../apis/user/logout";
 
 export const ProfileCard: React.FC = () => {
-  const { currentUser, handleLogout } = useProfileCard();
+  const { currentUser, setIsLogedIn } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    setIsLogedIn(false);
+  };
 
   return (
     <div className="profile">

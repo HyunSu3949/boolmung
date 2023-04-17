@@ -3,6 +3,7 @@ import { ProfileCard } from "./ProfileCard/ProfileCard";
 import { ChatWindow } from "./ChatWindow/ChatWinow";
 import { useChatSocket } from "./useChatSocket";
 import { ChatScene } from "../canvas/ChatScene";
+import "./ChatRoomPage.css";
 
 export const ChatRoomPage = () => {
   const { chatList, actionInfo, chatSocket } = useChatSocket();
