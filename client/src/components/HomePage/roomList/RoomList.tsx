@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRoomList } from "./useRoomList";
-import { CreateChatModal } from "../../ChatRoomPage/CreateChatModal/CreateChatModal";
+import { CreateChatModal } from "../CreateChatModal/CreateChatModal";
 import { useRoomSocket } from "./useRoomSocket";
 import "./RoomList.css";
 

@@ -91,7 +91,8 @@ module.exports = (server, app) => {
         { new: true }
       );
 
-      if (room.participants === 0) {
+      console.log(room.participants);
+      if (room.participants.length === 0) {
         await Room.findByIdAndDelete(roomId);
         chat
           .to(roomId)

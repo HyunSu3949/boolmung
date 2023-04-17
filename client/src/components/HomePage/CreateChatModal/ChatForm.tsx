@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../common/Context/AuthContext";
 import { createRoom } from "../../../apis/room/createRoom";
+import { useNavigate } from "react-router-dom";
 
 type FormData = {
   title: string;
@@ -19,16 +20,21 @@ export const ChatForm = ({ closeModal }: PropsType) => {
     setError,
   } = useForm<FormData>();
 
+  const navigate = useNavigate();
+
   const { currentUser } = useAuth();
 
   const onSubmit = async (data: FormData) => {
+    let roomId;
     try {
       const result = await createRoom({ ...data, owner: currentUser._id });
       console.log(result);
+      roomId = result.data.data.data._id;
     } catch (error: any) {
       return;
     }
     closeModal();
+    navigate(`room/${roomId}`);
   };
 
   return (
@@ -37,6 +43,7 @@ export const ChatForm = ({ closeModal }: PropsType) => {
         <label htmlFor="title">방 제목</label>
         <input
           id="title"
+          placeholder="방 제목을 입력해주세요"
           type="text"
           {...register("title", { required: "방 제목을 입력해 주세요" })}
         />
@@ -47,9 +54,16 @@ export const ChatForm = ({ closeModal }: PropsType) => {
         <input
           id="max"
           type="number"
+          placeholder="2"
           min={2}
           max={10}
-          {...register("max", { required: "참가 인원을 입력해주세요" })}
+          {...register("max", {
+            required: "참가 인원을 입력해주세요",
+            pattern: {
+              value: /^[0-9]*$/,
+              message: "숫자만 입력해주세요",
+            },
+          })}
         />
         {errors.max && <p>{errors.max.message}</p>}
       </div>
