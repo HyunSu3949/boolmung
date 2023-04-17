@@ -8,7 +8,11 @@ type FormData = {
   passwordConfirm: string;
 };
 
-export const useSignupForm = () => {
+type PropsType = {
+  closeModal: () => void;
+};
+
+export const useSignupForm = ({ closeModal }: PropsType) => {
   const {
     register,
     handleSubmit,
@@ -37,6 +41,7 @@ export const useSignupForm = () => {
 
       return;
     }
+    closeModal();
     alert("회원가입 완료!");
   };
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { sendChat } from "../../../apis/room/sendChat";
 import { ChatList } from "./ChatList";
+import "./ChatWindow.css";
 
 export const ChatWindow = ({ chatList }: any) => {
   const { id: roomId = "" } = useParams();
@@ -10,6 +11,7 @@ export const ChatWindow = ({ chatList }: any) => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (message === "") return;
@@ -20,7 +22,7 @@ export const ChatWindow = ({ chatList }: any) => {
 
   return (
     <div className="chatWindow">
-      <div>
+      <div className="chatListBox">
         <ChatList chatList={chatList} />
       </div>
       <form onSubmit={onSubmit} className="chatForm">
@@ -30,7 +32,7 @@ export const ChatWindow = ({ chatList }: any) => {
           value={message}
           className="chatInput"
         />
-        <button className="chatButton">보내기</button>
+        <button className="chatButton">입력</button>
       </form>
     </div>
   );

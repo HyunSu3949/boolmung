@@ -2,9 +2,12 @@
   position: relative;
   height: 100%;
 }
+
 .roomUl {
   padding: 5px;
+  height: 80%;
   list-style: none;
+  overflow-y: auto;
 }
 
 .roomLi {

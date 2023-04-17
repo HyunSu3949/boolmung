@@ -6,8 +6,9 @@ type propsType = {
 };
 
 export const SignupForm = ({ closeModal }: propsType) => {
-  const { register, handleSubmit, errors, onSubmit, password } =
-    useSignupForm();
+  const { register, handleSubmit, errors, onSubmit, password } = useSignupForm({
+    closeModal,
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

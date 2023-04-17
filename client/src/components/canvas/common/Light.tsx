@@ -5,7 +5,7 @@ export const Lights = () => {
 
   return (
     <>
-      <ambientLight intensity={0.8} />
+      <ambientLight intensity={1} />
       <pointLight
         ref={lightRef}
         position={[0, 1, 0]}
