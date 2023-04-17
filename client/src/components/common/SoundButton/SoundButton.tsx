@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
+import "./SoundButton.css";
 
 export const SoundButton = () => {
   const [playing, setPlaying] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioFile = "/sound/fireSound.mp3";
-
   useEffect(() => {
     if (playing) {
       audioRef.current?.play();
@@ -27,10 +27,28 @@ export const SoundButton = () => {
   };
 
   return (
-    <div>
+    <div className="soundButtonBox">
       <audio ref={audioRef} src={audioFile} loop />
-      <button onClick={togglePlaying}>
-        {playing ? "소리 끄기" : "소리 켜기"}
+      <button className="soundButton" onClick={togglePlaying}>
+        {playing ? (
+          <>
+            <img
+              className="volumeIcon"
+              src="/img/volume-on.svg"
+              alt="소리 켜진 아이콘"
+            />
+            <span>소리 끄기</span>
+          </>
+        ) : (
+          <>
+            <img
+              className="volumeIcon"
+              src="/img/volume-off.svg"
+              alt="소리 꺼진 아이콘"
+            />
+            <span>소리 켜기</span>
+          </>
+        )}
       </button>
     </div>
   );

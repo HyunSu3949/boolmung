@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { sendChat } from "../../apis/room/sendChat";
+import { sendChat } from "../../../apis/room/sendChat";
 import { ChatList } from "./ChatList";
 
 export const ChatWindow = ({ chatList }: any) => {

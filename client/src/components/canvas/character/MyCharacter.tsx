@@ -5,7 +5,7 @@ import { GLTF } from "three-stdlib";
 import { useInput } from "./useInput";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useParams } from "react-router-dom";
-import { useAuth } from "../../AuthContext/AuthContext";
+import { useAuth } from "../../common/Context/AuthContext";
 import { directionOffset, roundToTwoDecimal } from "./utils";
 
 type GLTFResult = GLTF & {

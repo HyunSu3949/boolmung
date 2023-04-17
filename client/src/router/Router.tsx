@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { HomePage } from "../components/pages/HomePage";
-import { ChatRoomPage } from "../components/pages/ChatRoomPage";
+import { HomePage } from "../components/HomePage/HomePage";
+import { ChatRoomPage } from "../components/ChatRoomPage/ChatRoomPage";
 
 export const Router = () => {
   return (

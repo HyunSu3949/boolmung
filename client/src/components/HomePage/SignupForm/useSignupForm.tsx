@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { signup } from "../../apis/user/signup";
+import { signup } from "../../../apis/user/signup";
 
 type FormData = {
   name: string;

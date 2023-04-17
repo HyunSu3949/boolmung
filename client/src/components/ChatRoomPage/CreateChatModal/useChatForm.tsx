@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../AuthContext/AuthContext";
+import { useAuth } from "../../common/Context/AuthContext";
 import { createRoom } from "../../../apis/room/createRoom";
 
 type FormData = {

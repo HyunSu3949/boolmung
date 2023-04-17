@@ -1,5 +1,5 @@
-import { useAuth } from "../AuthContext/AuthContext";
-import { logout } from "../../apis/user/logout";
+import { useAuth } from "../../common/Context/AuthContext";
+import { logout } from "../../../apis/user/logout";
 
 export const useProfileCard = () => {
   const { currentUser, setIsLogedIn } = useAuth();

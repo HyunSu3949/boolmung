@@ -1,16 +1,21 @@
 import React from "react";
 import { useSignupForm } from "./useSignupForm";
 
-export const SignupForm: React.FC = () => {
+type propsType = {
+  closeModal: () => void;
+};
+
+export const SignupForm = ({ closeModal }: propsType) => {
   const { register, handleSubmit, errors, onSubmit, password } =
     useSignupForm();
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
-        <label htmlFor="name">Name:</label>
+        <label htmlFor="name">닉네임</label>
         <input
           id="name"
+          type="text"
           {...register("name", {
             required: "이름을 입력해주세요",
             validate: (value: string) =>
@@ -20,7 +25,7 @@ export const SignupForm: React.FC = () => {
         {errors.name && <p>{errors.name.message}</p>}
       </div>
       <div>
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email">이메일</label>
         <input
           id="email"
           type="email"
@@ -36,7 +41,7 @@ export const SignupForm: React.FC = () => {
         {errors.email && <p>{errors.email.message}</p>}
       </div>
       <div>
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="password">비밀번호</label>
         <input
           id="password"
           type="password"
@@ -51,7 +56,7 @@ export const SignupForm: React.FC = () => {
         {errors.password && <p>{errors.password.message}</p>}
       </div>
       <div>
-        <label htmlFor="passwordConfirm">Password Confirm:</label>
+        <label htmlFor="passwordConfirm">비밀번호 확인</label>
         <input
           id="passwordConfirm"
           type="password"
@@ -63,7 +68,12 @@ export const SignupForm: React.FC = () => {
         />
         {errors.passwordConfirm && <p>{errors.passwordConfirm.message}</p>}
       </div>
-      <button type="submit">Submit</button>
+      <div>
+        <button type="submit">회원가입</button>
+        <button type="button" onClick={closeModal}>
+          취소
+        </button>
+      </div>
     </form>
   );
 };

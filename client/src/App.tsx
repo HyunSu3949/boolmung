@@ -1,7 +1,7 @@
 import React from "react";
-import { AuthProvider } from "./components/AuthContext/AuthContext";
+import { AuthProvider } from "./components/common/Context/AuthContext";
 import { Main } from "./components/Main/Main";
-import { SoundButton } from "./components/SoundButton/SoundButton";
+import { SoundButton } from "./components/common/SoundButton/SoundButton";
 
 export default function App() {
   return (

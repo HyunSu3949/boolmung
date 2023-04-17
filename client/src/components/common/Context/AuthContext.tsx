@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useContext,
 } from "react";
-import axiosInstance from "../../apis/utils/instance";
+import axiosInstance from "../../../apis/utils/instance";
 
 type Context = {
   isLogedIn: boolean | undefined;

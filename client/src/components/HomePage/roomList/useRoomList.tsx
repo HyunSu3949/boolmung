@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { getAllRoom } from "../../apis/room/getAllRoom";
-import { useAuth } from "../AuthContext/AuthContext";
+import { getAllRoom } from "../../../apis/room/getAllRoom";
 import { useNavigate } from "react-router-dom";
-import { joinRoom } from "../../apis/room/joinRoom";
-import { io } from "socket.io-client";
+import { joinRoom } from "../../../apis/room/joinRoom";
 
 export const useRoomList = () => {
   const [roomList, setRoomList] = useState([]);

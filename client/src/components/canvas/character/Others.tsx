@@ -2,7 +2,7 @@ import React from "react";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { OtherCharacter } from "./OtherCharacter";
-import { useAuth } from "../../AuthContext/AuthContext";
+import { useAuth } from "../../common/Context/AuthContext";
 
 type GLTFResult = GLTF & {
   nodes: {
