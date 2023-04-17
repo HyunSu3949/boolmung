@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from "react";
 
 type Chat = {
-  room: string;
-  user: string;
+  _id: string;
+  type: "system" | "mine" | "others" | undefined;
+  name: string;
   message: string;
 };
+
 export const ChatList = ({ chatList }: { chatList: Chat[] }) => {
   const chatListRef = useRef<HTMLUListElement>(null);
 
@@ -18,7 +20,10 @@ export const ChatList = ({ chatList }: { chatList: Chat[] }) => {
     <div>
       <ul ref={chatListRef}>
         {chatList.map((chat, idx) => (
-          <li key={idx}>{chat.message}</li>
+          <li key={idx} className={chat.type === "mine" ? "mine" : "others"}>
+            <span>{chat.name}</span>
+            <p>{chat.message}</p>
+          </li>
         ))}
       </ul>
     </div>

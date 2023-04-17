@@ -52,4 +52,14 @@
 
 .chatListBox li {
   padding: 10px;
+  color: white;
+}
+
+.chatListBox .mine {
+  color: rgb(245, 209, 144);
+}
+
+.chatListBox li span {
+  font-size: 12px;
+  color: #ccc;
 }

@@ -3,11 +3,13 @@ import { useParams } from "react-router-dom";
 import { sendChat } from "../../../apis/room/sendChat";
 import { ChatList } from "./ChatList";
 import "./ChatWindow.css";
+import { useAuth } from "../../common/Context/AuthContext";
 
 export const ChatWindow = ({ chatList }: any) => {
   const { id: roomId = "" } = useParams();
   const [message, setMessage] = useState("");
   const inputRef = useRef(null);
+  const { currentUser } = useAuth();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -17,7 +19,7 @@ export const ChatWindow = ({ chatList }: any) => {
     e.preventDefault();
     if (message === "") return;
 
-    sendChat(roomId, message);
+    sendChat(roomId, currentUser.name, message);
     setMessage("");
   };
 

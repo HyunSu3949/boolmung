@@ -110,14 +110,16 @@ exports.removeRoom = catchAsync(async (req, res, next) => {
 
 exports.sendChat = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user.id);
-
   const chat = await Chat.create({
     room: req.params.id,
     user: req.user.id,
     message: req.body.message,
   });
-  console.log(req.params.id);
-  req.app.get("io").of("/chat").to(req.params.id).emit("chat", chat);
+  req.app.get("io").of("/chat").to(req.params.id).emit("chat", {
+    _id: req.user.id,
+    name: req.body.name,
+    message: req.body.message,
+  });
   res.send("ok");
 });
 

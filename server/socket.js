@@ -31,12 +31,13 @@ module.exports = (server, app) => {
 
     socket.on("join", (data) => {
       console.log("join 이벤트 발생");
-      const { roomId, userId } = data;
+      const { roomId, userId, name } = data;
       socket.join(data.roomId);
 
       socketUserMap[socket.id] = {
         userId,
         roomId,
+        name,
       };
 
       actionState[socket.id] = {
@@ -53,7 +54,7 @@ module.exports = (server, app) => {
 
       chat.to(roomId).emit("chat", {
         type: "system",
-        message: `${userId} 님이 입장하셨습니다.`,
+        message: `${name} 님이 입장하셨습니다.`,
       });
       chat.to(roomId).emit("move", actionState);
     });
@@ -74,7 +75,7 @@ module.exports = (server, app) => {
 
       if (!socketUserMap[socket.id]) return;
 
-      const { userId, roomId } = socketUserMap[socket.id];
+      const { userId, roomId, name } = socketUserMap[socket.id];
 
       delete socketUserMap[socket.id];
       delete actionState[socket.id];
@@ -98,7 +99,7 @@ module.exports = (server, app) => {
       } else {
         chat.to(roomId).emit("chat", {
           type: "system",
-          message: `${userId}님이 퇴장하셨습니다.`,
+          message: `${name}님이 퇴장하셨습니다.`,
         });
       }
     });

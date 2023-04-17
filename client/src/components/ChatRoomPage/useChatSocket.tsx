@@ -7,8 +7,9 @@ const Url = "http://127.0.0.1:3000/chat";
 const Path = "/socket.io";
 
 type Chat = {
-  room: string;
-  user: string;
+  _id: string;
+  type: "system" | "mine" | "others" | undefined;
+  name: string;
   message: string;
 };
 
@@ -23,7 +24,11 @@ export const useChatSocket = () => {
     const chatSocket = io(Url, {
       path: Path,
     });
-    chatSocket.emit("join", { userId: currentUser._id, roomId: id });
+    chatSocket.emit("join", {
+      userId: currentUser._id,
+      roomId: id,
+      name: currentUser.name,
+    });
     setChatSocket(chatSocket);
   };
 
@@ -34,6 +39,13 @@ export const useChatSocket = () => {
   const chatCallback = (data: Chat) => {
     console.log(data);
 
+    if (data._id === currentUser._id) {
+      data.type = "mine";
+    } else if (data._id !== currentUser._id) {
+      data.type = "others";
+    } else if (data.type) {
+      data.type = "system";
+    }
     setChatList((prev) => [...prev, data]);
   };
 
