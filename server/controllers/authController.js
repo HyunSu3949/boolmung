@@ -19,8 +19,6 @@ const createSendToken = (user, statusCode, req, res) => {
     ),
     httpOnly: true,
     secure: req.secure || req.headers("x-forwarded-proto") === "https",
-    domain: ".boolmung.netlify.app",
-    sameSite: "none",
   });
 
   // res에 password 제거
@@ -67,8 +65,6 @@ exports.logout = (req, res) => {
   res.cookie("jwt", "loggedout", {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
-    domain: ".boolmung.netlify.app",
-    sameSite: "none",
   });
   res.status(200).json({ status: "success" });
 };

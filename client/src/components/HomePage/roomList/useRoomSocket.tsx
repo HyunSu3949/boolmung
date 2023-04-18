@@ -5,7 +5,7 @@ import { joinRoom } from "../../../apis/room/joinRoom";
 
 import { io, Socket } from "socket.io-client";
 
-const Url = "https://boolmung.herokuapp.com/room";
+const Url = "/room";
 const Path = "/socket.io";
 
 type RoomInfo = {

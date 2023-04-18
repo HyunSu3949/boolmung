@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-const baseURL = "https://boolmung.herokuapp.com/api/v1";
+const baseURL = "/api/v1";
 
 const axiosInstance = axios.create({
   baseURL,
