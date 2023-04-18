@@ -23,6 +23,7 @@ app.use(
   cors({
     origin: "https://boolmung.netlify.app", //프론트 개발
     credentials: true,
+    methods: "PUT, GET, POST, DELETE, OPTIONS",
   })
 );
 
