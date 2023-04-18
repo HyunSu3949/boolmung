@@ -17,7 +17,7 @@ const createSendToken = (user, statusCode, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000 //1d
     ),
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: "none",
   };
   if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
 
@@ -82,7 +82,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
-
+  console.log("token: " + token);
   if (!token) {
     return next(new AppError("토큰이 없습니다. 로그인이 필요합니다.", 401));
   }

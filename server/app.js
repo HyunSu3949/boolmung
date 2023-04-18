@@ -21,7 +21,7 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: "http://localhost:5500", //프론트 개발
+    origin: "https://boolmung.netlify.app", //프론트 개발
     credentials: true,
   })
 );
