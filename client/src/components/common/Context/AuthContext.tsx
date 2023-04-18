@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    if (isLogedIn) checkLoginStatus();
+    checkLoginStatus();
   }, [isLogedIn]);
 
   return (
