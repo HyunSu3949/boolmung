@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./SoundButton.css";
 
 export const SoundButton = () => {
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioFile = "/sound/fireSound.mp3";
   useEffect(() => {

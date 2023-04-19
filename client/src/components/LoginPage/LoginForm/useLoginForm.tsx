@@ -24,16 +24,10 @@ export const useLoginForm = () => {
         setIsLogedIn(true);
       }
     } catch (error: any) {
-      if (
-        error.response.data.message.includes(
-          "이메일 또는 비밀번호가 일치하지 않습니다"
-        )
-      ) {
-        setError("root", {
-          type: "manual",
-          message: "이메일 또는 비밀번호가 일치하지 않습니다",
-        });
-      }
+      setError("root", {
+        type: "manual",
+        message: "이메일 또는 비밀번호가 일치하지 않습니다",
+      });
       return;
     }
   };

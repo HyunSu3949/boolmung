@@ -7,6 +7,7 @@ import React, {
   useContext,
 } from "react";
 import axiosInstance from "../../../apis/utils/instance";
+import { getme } from "./../../../apis/user/getme";
 
 type Context = {
   isLogedIn: boolean | undefined;
@@ -38,7 +39,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const checkLoginStatus = async () => {
-    const response = await axiosInstance.get("/users/me");
+    const response = await getme();
 
     if (response.data.status === "success") {
       setCurrentUser(response.data.data.data);
@@ -50,7 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    checkLoginStatus();
+    if (isLogedIn !== false) checkLoginStatus();
   }, [isLogedIn]);
 
   return (
