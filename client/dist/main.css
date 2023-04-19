@@ -1,25 +1,3 @@
-.soundButtonBox {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-}
-
-.soundButton {
-  display: flex;
-  align-items: center;
-  background-color: transparent;
-  border: none;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  width: 120px;
-  justify-content: space-between;
-}
-
-.volumeIcon {
-  fill: #ff0000;
-}
-
 .chatModal {
   position: absolute;
   display: flex;
@@ -146,6 +124,142 @@
   cursor: pointer;
 }
 
+.side {
+  position: absolute;
+  height: 40%;
+  width: 300px;
+  padding: 20px;
+  top: 0;
+  right: 0;
+  padding-top: 50px;
+  z-index: 1;
+}
+
+.signupModalButton {
+  width: 50%;
+  transform: translate(100%, -100%);
+  background-color: #ccc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  display: flex;
+  width: 100%;
+  padding: 10px 20px;
+  justify-content: end;
+  z-index: 2;
+}
+
+.profile {
+  display: flex;
+  width: 200px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logoutButton {
+  background-color: #333333;
+  color: #fff;
+  padding: 10px 20px;
+  border: 1px solid #333333;
+  border-radius: 5px;
+}
+
+.logoutButton:hover {
+  background-color: #3d3d3d;
+  cursor: pointer;
+}
+
+.chatWindow {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.chatListBox {
+  display: flex;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.chatForm {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f5f5f5;
+}
+
+.chatInput {
+  height: 40px;
+  margin: 0;
+  border-radius: 5px;
+  border: 1px solid #dad5d5;
+}
+.chatInput:focus {
+  outline: none;
+  box-shadow: 0 0 5px #ccc;
+}
+
+.chatButton {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #0077cc;
+  color: white;
+  cursor: pointer;
+}
+
+.chatButton:hover {
+  background-color: #005fa3;
+}
+
+.chatListBox ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.chatListBox li {
+  padding: 10px;
+  color: white;
+}
+
+.chatListBox .mine {
+  color: rgb(245, 209, 144);
+}
+
+.chatListBox li span {
+  font-size: 12px;
+  color: #ccc;
+}
+
+.main {
+  width: 100%;
+  height: 100%;
+}
+
+.exitButton {
+  background-color: #333333;
+  color: #fff;
+  padding: 8px 15px;
+  border: 1px solid #333333;
+  border-radius: 5px;
+}
+.exitButton:hover {
+  background-color: #3d3d3d;
+  cursor: pointer;
+}
+
 .loginForm > div {
   display: flex;
   flex-direction: column;
@@ -207,6 +321,10 @@
   background-color: #bfbfbf;
 }
 
+.ReactModalPortal {
+  position: relative;
+  z-index: 2;
+}
 .signupModal {
   position: absolute;
   display: flex;
@@ -295,116 +413,29 @@
   background-color: #bfbfbf;
 }
 
-.side {
+.soundButtonBox {
   position: absolute;
-  height: 40%;
-  width: 300px;
-  padding: 20px;
-  top: 0;
-  right: 0;
-  z-index: 1;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
 }
-
-.signupModalButton {
-  width: 50%;
-  transform: translate(100%, -100%);
-  background-color: #ccc;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
+.soundButtonBox:hover {
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
-
-.chatWindow {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  border: 1px solid black;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.chatListBox {
-  display: flex;
-  height: 400px;
-  overflow-y: auto;
-}
-
-.chatForm {
+.soundButton {
   display: flex;
   align-items: center;
-  padding: 10px;
-  background-color: #f5f5f5;
-}
-
-.chatInput {
-  height: 40px;
-  margin: 0;
-  border-radius: 5px;
-  border: 1px solid #dad5d5;
-}
-.chatInput:focus {
-  outline: none;
-  box-shadow: 0 0 5px #ccc;
-}
-
-.chatButton {
-  padding: 10px;
-  border-radius: 5px;
+  background-color: transparent;
   border: none;
-  background-color: #0077cc;
   color: white;
-  cursor: pointer;
-}
-
-.chatButton:hover {
-  background-color: #005fa3;
-}
-
-.chatListBox ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.chatListBox li {
-  padding: 10px;
-  color: white;
-}
-
-.chatListBox .mine {
-  color: rgb(245, 209, 144);
-}
-
-.chatListBox li span {
-  font-size: 12px;
-  color: #ccc;
-}
-
-.main {
-  width: 100%;
-  height: 100%;
-}
-
-.profile {
-  display: flex;
+  font-size: 16px;
+  font-weight: bold;
+  width: 120px;
   justify-content: space-between;
-  align-items: center;
 }
 
-.logoutButton {
-  background-color: #333333;
-  color: #fff;
-  padding: 10px 20px;
-  border: 1px solid #333333;
-  border-radius: 5px;
-}
-
-.logoutButton:hover {
-  background-color: #3d3d3d;
-  cursor: pointer;
+.volumeIcon {
+  fill: #ff0000;
 }
 
 * {

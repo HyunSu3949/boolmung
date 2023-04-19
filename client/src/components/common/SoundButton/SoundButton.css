@@ -1,9 +1,12 @@
 .soundButtonBox {
-  position: fixed;
+  position: absolute;
   top: 10px;
   left: 10px;
+  z-index: 2;
 }
-
+.soundButtonBox:hover {
+  cursor: pointer;
+}
 .soundButton {
   display: flex;
   align-items: center;

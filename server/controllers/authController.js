@@ -80,7 +80,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
-  console.log("token: " + token);
   if (!token) {
     return next(new AppError("토큰이 없습니다. 로그인이 필요합니다.", 401));
   }
