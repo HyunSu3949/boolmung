@@ -5,7 +5,7 @@ import { joinRoom } from "../../../apis/room/joinRoom";
 
 import { io, Socket } from "socket.io-client";
 
-const Url = "http://127.0.0.1:3000/room";
+const Url = "http://localhost:3000/room";
 const Path = "/socket.io";
 
 type RoomInfo = {
@@ -21,8 +21,16 @@ export const useRoomSocket = () => {
 
   const navigate = useNavigate();
 
-  const enterRoom = (roomId: string) => {
-    joinRoom(roomId);
+  const enterRoom = async (roomId: string) => {
+    try {
+      const result: any = await joinRoom(roomId);
+    } catch (err: any) {
+      if (err.response.status === 404) {
+        alert("허용 인원을 초과했습니다.");
+        return;
+      }
+    }
+
     navigate(`/room/${roomId}`);
   };
 
