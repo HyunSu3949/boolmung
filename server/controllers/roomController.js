@@ -48,14 +48,21 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
   const chat = req.app.get("io").of("/chat");
   const { rooms } = chat.adapter;
 
-  if (room.max < rooms.get(req.params.id).size) {
+  //방 만든 사람은 참가자로 카운팅 하지 않습니다.
+  if (room.max <= rooms.get(req.params.id).size) {
     return next(new AppError("허용 인원을 초과하였습니다.", 404));
   }
 
-  if (!room.participants.includes(req.user.id)) {
+  const alreadyJoined = room.participants.some(
+    (participant) => participant.user.toString() === req.user.id
+  );
+
+  if (!alreadyJoined) {
     // 새로운 참가자 추가
     room.participants.push({ user: req.user.id, joinedAt: Date.now() });
     await room.save();
+  } else {
+    return next(new AppError("이미 같은 아이디로 참가하였습니다.", 404));
   }
 
   res.status(200).json({
