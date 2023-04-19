@@ -25,13 +25,18 @@ export const useSignupForm = ({ closeModal }: PropsType) => {
     try {
       await signup(data);
     } catch (error: any) {
-      if (error.response.data.message.includes("E11000")) {
+      const errorMessage = error.response.data.message;
+      if (
+        errorMessage.includes("Duplicate") &&
+        errorMessage.includes("email")
+      ) {
         setError("email", {
           type: "manual",
           message: "이미 사용중인 이메일 입니다.",
         });
       } else if (
-        error.response.data.message.includes("User validation failed: password")
+        errorMessage.includes("Invalid input data") &&
+        errorMessage.includes(`password`)
       ) {
         setError("password", {
           type: "manual",
