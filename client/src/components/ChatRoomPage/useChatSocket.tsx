@@ -38,6 +38,7 @@ export const useChatSocket = () => {
 
   const chatCallback = (data: Chat) => {
     console.log(data);
+    console.log(data._id, currentUser._id);
 
     if (data._id === currentUser._id) {
       data.type = "mine";

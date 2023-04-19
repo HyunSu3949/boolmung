@@ -34,6 +34,7 @@ export const ChatForm = ({ closeModal }: PropsType) => {
       return;
     }
     closeModal();
+
     navigate(`room/${roomId}`);
   };
 

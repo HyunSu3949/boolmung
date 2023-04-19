@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { ProfileCard } from "../common/ProfileCard/ProfileCard";
 import { ChatWindow } from "./ChatWindow/ChatWinow";
 import { useChatSocket } from "./useChatSocket";
 import { ChatScene } from "../canvas/ChatScene";
