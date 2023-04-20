@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 let baseURL;
-if (process.env.NODE_ENV === "developement") {
+if (process.env.NODE_ENV === "development") {
   baseURL = process.env.DEV_DOMAIN;
 } else {
   baseURL = process.env.PROD_DOMAIN;

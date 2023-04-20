@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
 let baseURL;
-if (process.env.NODE_ENV === "developement") {
+if (process.env.NODE_ENV === "development") {
   baseURL = process.env.DEV_SOCKET_DOMAIN;
 } else {
   baseURL = "";
