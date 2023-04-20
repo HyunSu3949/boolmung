@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { getAllRoom } from "../../../apis/room/getAllRoom";
+import { getAllRoom } from "../../apis/room/getAllRoom";
 import { useNavigate } from "react-router-dom";
-import { joinRoom } from "../../../apis/room/joinRoom";
+import { joinRoom } from "../../apis/room/joinRoom";
 
 import { io, Socket } from "socket.io-client";
 

@@ -1,8 +1,9 @@
-const prod = process.env.NODE_ENV === "production";
-
+const Dotenv = require("dotenv-webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+
+const prod = process.env.NODE_ENV === "production";
 
 module.exports = {
   mode: prod ? "production" : "development",
@@ -47,5 +48,6 @@ module.exports = {
         { from: "./public/sound", to: "./sound" },
       ],
     }),
+    new Dotenv(),
   ],
 };

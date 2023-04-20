@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CreateChatModal } from "../CreateChatModal/CreateChatModal";
-import { useRoomSocket } from "./useRoomSocket";
+import { useRoomSocket } from "../useRoomSocket";
 import "./RoomList.css";
 type RoomInfo = {
   _id: string;

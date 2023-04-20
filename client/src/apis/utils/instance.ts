@@ -1,6 +1,11 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-const baseURL = "http://localhost:3000/api/v1"; // 개발 로컬주소
+let baseURL;
+if (process.env.NODE_ENV === "developement") {
+  baseURL = process.env.DEV_DOMAIN;
+} else {
+  baseURL = process.env.PROD_DOMAIN;
+}
 
 const axiosInstance = axios.create({
   baseURL,
