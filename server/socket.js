@@ -16,10 +16,12 @@ module.exports = (server, app) => {
   app.set("io", io);
   const room = io.of("/room");
   const chat = io.of("/chat");
+  const position = io.of("/position");
 
   room.on("connection", (socket) => {
     console.log("room 네임스페이스에 접속");
-    room.emit("enter", {});
+
+    socket.on("newRoom", (data) => {});
 
     socket.on("disconnect", () => {
       console.log("room 네임스페이스 접속 해제");
@@ -32,7 +34,7 @@ module.exports = (server, app) => {
     socket.on("join", (data) => {
       console.log("join 이벤트 발생");
       const { roomId, userId, name } = data;
-      socket.join(data.roomId);
+      socket.join(roomId);
 
       socketUserMap[socket.id] = {
         userId,
@@ -40,23 +42,22 @@ module.exports = (server, app) => {
         name,
       };
 
-      actionState[socket.id] = {
-        userId,
-        input: {
-          forward: false,
-          backward: false,
-          left: false,
-          right: false,
-        },
-        position: [0, 0, 0],
-        cameraCharacterAngleY: 0,
-      };
-
       chat.to(roomId).emit("chat", {
         type: "system",
         message: `${name} 님이 입장하셨습니다.`,
       });
-      chat.to(roomId).emit("move", actionState);
+    });
+
+    socket.on("chat", (data) => {
+      console.log("chat 이벤트 발생");
+      console.log(data);
+      const { userId, roomId, name, message } = data;
+      chat.to(roomId).emit("chat", {
+        type: "user",
+        _id: userId,
+        name,
+        message,
+      });
     });
 
     socket.on("move", (data) => {
@@ -103,5 +104,9 @@ module.exports = (server, app) => {
         });
       }
     });
+  });
+
+  position.on("connection", (socket) => {
+    console.log("position 네임스페이스에 접속");
   });
 };

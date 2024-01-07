@@ -12,8 +12,6 @@ exports.createRoom = catchAsync(async (req, res, next) => {
     owner: req.user.id,
     participants: [{ user: req.user.id }],
   });
-  const io = req.app.get("io");
-  io.of("/room").emit("newRoom", newRoom);
 
   res.status(201).json({
     status: "success",
@@ -115,11 +113,7 @@ exports.sendChat = catchAsync(async (req, res, next) => {
     user: req.user.id,
     message: req.body.message,
   });
-  req.app.get("io").of("/chat").to(req.params.id).emit("chat", {
-    _id: req.user.id,
-    name: req.body.name,
-    message: req.body.message,
-  });
+
   res.send("ok");
 });
 
