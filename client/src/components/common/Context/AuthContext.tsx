@@ -6,7 +6,6 @@ import React, {
   useEffect,
   useContext,
 } from "react";
-import axiosInstance from "../../../apis/utils/instance";
 import { getme } from "./../../../apis/user/getme";
 
 type Context = {

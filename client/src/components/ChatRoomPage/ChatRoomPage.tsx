@@ -5,9 +5,10 @@ import { ChatScene } from "../canvas/ChatScene";
 import "./ChatRoomPage.css";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "../common/Navbar/Navbar";
+import { sendChat } from "./../../apis/room/sendChat";
 
 export const ChatRoomPage = () => {
-  const { chatList, actionInfo, chatSocket } = useChatSocket();
+  const { chatList, actionInfo, chatSocket, sendChat } = useChatSocket();
   const navigate = useNavigate();
   const exitRoom = () => {
     navigate(-1);
@@ -17,7 +18,7 @@ export const ChatRoomPage = () => {
       <ChatScene actionInfo={actionInfo} chatSocket={chatSocket} />
       <Navbar />
       <div className="side">
-        <ChatWindow chatList={chatList} />
+        <ChatWindow chatList={chatList} sendChat={sendChat} />
         <button className="exitButton" onClick={exitRoom}>
           나가기
         </button>

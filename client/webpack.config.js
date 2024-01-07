@@ -1,8 +1,9 @@
-const prod = process.env.NODE_ENV === "production";
-
+const Dotenv = require("dotenv-webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+
+const prod = process.env.NODE_ENV === "production";
 
 module.exports = {
   mode: prod ? "production" : "development",
@@ -15,10 +16,14 @@ module.exports = {
       {
         test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
+        use: [
+          {
+            loader: "babel-loader",
+          },
+        ],
         resolve: {
           extensions: [".ts", ".tsx", ".js", ".json"],
         },
-        use: ["babel-loader", "ts-loader"],
       },
       {
         test: /\.(css)$/,
@@ -47,5 +52,6 @@ module.exports = {
         { from: "./public/sound", to: "./sound" },
       ],
     }),
+    new Dotenv(),
   ],
 };

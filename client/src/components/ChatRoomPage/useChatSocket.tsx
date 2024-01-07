@@ -3,7 +3,7 @@ import { io, Socket } from "socket.io-client";
 import { useAuth } from "../common/Context/AuthContext";
 import { useParams } from "react-router-dom";
 
-const Url = "/chat";
+const Url = "http://127.0.0.1:3000/chat";
 const Path = "/socket.io";
 
 type Chat = {
@@ -24,14 +24,26 @@ export const useChatSocket = () => {
     const chatSocket = io(Url, {
       path: Path,
     });
+
     chatSocket.emit("join", {
       userId: currentUser._id,
       roomId: id,
       name: currentUser.name,
     });
-    setChatSocket(chatSocket);
+
+    addSocketEvent(chatSocket);
+
+    return chatSocket;
   };
 
+  const sendChat = (message: string) => {
+    chatSocket?.emit("chat", {
+      userId: currentUser._id,
+      roomId: id,
+      name: currentUser.name,
+      message,
+    });
+  };
   const joinCallback = (data: any) => {
     console.log(data);
   };
@@ -44,9 +56,8 @@ export const useChatSocket = () => {
       data.type = "mine";
     } else if (data._id !== currentUser._id) {
       data.type = "others";
-    } else if (data.type) {
-      data.type = "system";
     }
+
     setChatList((prev) => [...prev, data]);
   };
 
@@ -54,38 +65,35 @@ export const useChatSocket = () => {
     setActionInfo(data);
   };
 
-  const disconnectChat = () => {
-    chatSocket?.disconnect();
+  const disconnectChat = (socket: any) => {
+    socket.disconnect();
   };
 
-  const addSocketEvent = () => {
-    chatSocket?.on("join", joinCallback);
-    chatSocket?.on("chat", chatCallback);
-    chatSocket?.on("move", moveCallback);
+  const addSocketEvent = (socket: any) => {
+    socket.on("join", joinCallback);
+    socket.on("chat", chatCallback);
+    socket.on("move", moveCallback);
   };
 
-  const removeSocketEvent = () => {
-    chatSocket?.off("join", joinCallback);
-    chatSocket?.off("chat", chatCallback);
-    chatSocket?.off("move", moveCallback);
+  const removeSocketEvent = (socket: any) => {
+    socket.off("join", joinCallback);
+    socket.off("chat", chatCallback);
+    socket.off("move", moveCallback);
   };
 
   useEffect(() => {
-    if (!chatSocket) connectChat();
-
-    addSocketEvent();
+    setChatSocket(connectChat());
 
     return () => {
-      disconnectChat();
-      removeSocketEvent();
+      disconnectChat(chatSocket);
+      removeSocketEvent(chatSocket);
     };
-  }, [chatSocket]);
+  }, []);
+
   return {
     chatSocket,
     chatList,
     actionInfo,
-    connectChat,
-    addSocketEvent,
-    disconnectChat,
+    sendChat,
   };
 };

@@ -1,15 +1,10 @@
 import React, { useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import { sendChat } from "../../../apis/room/sendChat";
 import { ChatList } from "./ChatList";
 import "./ChatWindow.css";
-import { useAuth } from "../../common/Context/AuthContext";
 
-export const ChatWindow = ({ chatList }: any) => {
-  const { id: roomId = "" } = useParams();
+export const ChatWindow = ({ chatList, sendChat }: any) => {
   const [message, setMessage] = useState("");
   const inputRef = useRef(null);
-  const { currentUser } = useAuth();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -19,7 +14,7 @@ export const ChatWindow = ({ chatList }: any) => {
     e.preventDefault();
     if (message === "") return;
 
-    sendChat(roomId, currentUser.name, message);
+    sendChat(message);
     setMessage("");
   };
 
@@ -45,7 +40,9 @@ export const ChatWindow = ({ chatList }: any) => {
           value={message}
           className="chatInput"
         />
-        <button className="chatButton">입력</button>
+        <button className="chatButton" type="submit">
+          입력
+        </button>
       </form>
     </div>
   );

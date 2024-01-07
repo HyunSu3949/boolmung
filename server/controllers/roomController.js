@@ -12,8 +12,6 @@ exports.createRoom = catchAsync(async (req, res, next) => {
     owner: req.user.id,
     participants: [{ user: req.user.id }],
   });
-  const io = req.app.get("io");
-  io.of("/room").emit("newRoom", newRoom);
 
   res.status(201).json({
     status: "success",
@@ -48,21 +46,14 @@ exports.enterRoom = catchAsync(async (req, res, next) => {
   const chat = req.app.get("io").of("/chat");
   const { rooms } = chat.adapter;
 
-  //방 만든 사람은 참가자로 카운팅 하지 않습니다.
-  if (room.max <= rooms.get(req.params.id).size) {
+  if (room.max < rooms.get(req.params.id).size) {
     return next(new AppError("허용 인원을 초과하였습니다.", 404));
   }
 
-  const alreadyJoined = room.participants.some(
-    (participant) => participant.user.toString() === req.user.id
-  );
-
-  if (!alreadyJoined) {
+  if (!room.participants.includes(req.user.id)) {
     // 새로운 참가자 추가
     room.participants.push({ user: req.user.id, joinedAt: Date.now() });
     await room.save();
-  } else {
-    return next(new AppError("이미 같은 아이디로 참가하였습니다.", 404));
   }
 
   res.status(200).json({
@@ -122,11 +113,7 @@ exports.sendChat = catchAsync(async (req, res, next) => {
     user: req.user.id,
     message: req.body.message,
   });
-  req.app.get("io").of("/chat").to(req.params.id).emit("chat", {
-    _id: req.user.id,
-    name: req.body.name,
-    message: req.body.message,
-  });
+
   res.send("ok");
 });
 

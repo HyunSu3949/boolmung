@@ -1,6 +1,11 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-const baseURL = "/api/v1";
+let baseURL;
+if (process.env.NODE_ENV === "development") {
+  baseURL = process.env.DEV_DOMAIN;
+} else {
+  baseURL = process.env.PROD_DOMAIN;
+}
 
 const axiosInstance = axios.create({
   baseURL,
